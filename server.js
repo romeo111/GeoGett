@@ -36,7 +36,6 @@ require('./app/router/routes.js')(app);
 require('./app/auth/routes')(app, passport);
 
 app.get('/', function(req, res) {
-  console.log('get /');
   res.send(JSON.stringify(req.session.passport)).end();
 });
 
