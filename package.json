@@ -1,0 +1,36 @@
+{
+  "name": "geogett",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romeo111/geoget.git"
+  },
+  "author": "romeo111",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romeo111/geoget/issues"
+  },
+  "homepage": "https://github.com/romeo111/",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "dotenv": "^2.0.0",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.12",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.0",
+    "passport-twitter": "^1.0.4",
+    "passport-vkontakte": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1",
+    "nconf": "~0.6.9",
+    "node-uuid": "~1.4.1",
+    "nodemon": "^1.8.1",
+    "path": "^0.12.7"
+   }
+}

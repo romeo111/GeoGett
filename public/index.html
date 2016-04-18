@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<!-- added css animation script in body -->
+<html class="no-js" ng-app="GeogetAngularJS">
+<head>
+    <meta charset="utf-8">
+
+    <title>Getfood - первая геосеть для обмена едой</title>
+    <meta name="description" content="">
+	<link rel="shortcut icon" href="/images/favicon.ico" type="image/png">
+    <meta name="viewport" content="width=device-width">
+	<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCdpE8vYmUCuicjjvXf1F_F1MPb0TTLQ">
+    </script>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/templatemo_misc.css">
+    <link rel="stylesheet" href="css/templatemo_style.css">
+
+	<script src="js/vendor/angular.min.js"></script>
+    <script src="js/vendor/jquery-1.11.3.min.js"></script>
+	<script src="js/vendor/jquery-ui.js"></script>
+    <script src="js/vendor/bootstrap.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body  ng-controller="MainController">
+    <div class="site-header"  >
+        <div class="container">
+            <div class="row" >
+				          <div class="col-xs-3 col-md-4">  <a href="http://localhost:8080/">
+					               <span ><h1>Кругом еда</a><br> </h1>
+                  </div>
+
+
+
+
+						<span class="col-xs-5 col-md-4 col-lg-2 col-md-offset-3">
+
+
+						<a id="btn-home" href="index.html" class="btn btn-success btn-block hidden" role="button">Главная страница</a>
+						<a id="btn-map" class="btn btn-default btn-block" role="button" onclick="showMap()">Карта с едой</a>
+						<a id ="btn-services" href="#services" class="btn btn-info btn-block" role="button">Возможности</a>
+						<a id="btn-login" class="btn btn-warning btn-block" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a>
+      			<a id="btn-near" class="btn btn-danger btn-block hidden" role="button" onclick="showNearFood()">Еда рядом</a>
+
+						</span>
+            <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header" align="center">
+
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+
+                            <div id="div-forms">
+
+
+                                <form id="login-form">
+                                    <div class="modal-body">
+                                        <div id="div-login-msg">
+                                            <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                            <span id="text-login-msg">Введите логин и пароль</span>
+                                        </div>
+                                        <input id="login_username" class="form-control" type="text" placeholder="Логин (введите ERROR чтобы увидеть эффект ошибки)" required>
+                                        <input id="login_password" class="form-control" type="password" placeholder="Пароль" required>
+                                      
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Войти</button>
+                                        </div>
+                                        <div>
+                                            <button id="login_lost_btn" type="button" class="btn btn-link">Забыли пароль?</button>
+                                            <button id="login_register_btn" type="button" class="btn btn-link">Зарегистрироваться</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+
+                                <form id="lost-form" style="display:none;">
+                                    <div class="modal-body">
+                                        <div id="div-lost-msg">
+                                            <div id="icon-lost-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                            <span id="text-lost-msg">Введите ваш e-mail.</span>
+                                        </div>
+                                        <input id="lost_email" class="form-control" type="text" placeholder="E-Mail (введите ERROR чтобы увидеть эффект ошибки)" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Отправить</button>
+                                        </div>
+                                        <div>
+                                            <button id="lost_login_btn" type="button" class="btn btn-link">Войти</button>
+                                            <button id="lost_register_btn" type="button" class="btn btn-link">Зарегистрироваться</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+
+                                <form id="register-form" style="display:none;">
+                                    <div class="modal-body">
+                                        <div id="div-register-msg">
+                                            <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+                                            <span id="text-register-msg">Регистрация аккаунта</span>
+                                        </div>
+                                        <input id="register_username" class="form-control" type="text" placeholder="Логин (введите ERROR чтобы увидеть эффект ошибки)" required>
+                                        <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
+                                        <input id="register_password" class="form-control" type="password" placeholder="Пароль" required>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div>
+                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Зарегистрироваться</button>
+                                        </div>
+                                        <div>
+                                            <button id="register_login_btn" type="button" class="btn btn-link">Войти</button>
+                                            <button id="register_lost_btn" type="button" class="btn btn-link">Забыли пароль?</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+				</div><!-- end container -->
+      </div><!-- end row -->
+        </div> <!-- end header -->
+
+
+
+
+
+<div id="map" class="map"></div>
+<div id="bigSlider">
+    <div class="site-slider">
+        <ul class="bxslider hidden-xs">
+            <li>
+                <img src="images/slider/slide1.jpg" alt="slider image 1">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="slider-caption">
+                                <h2>Геосеть для обмена едой</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <img src="images/slider/slide2.jpg" alt="slider image 2">
+                <div class="container caption-wrapper">
+                    <div class="slider-caption">
+                        <h2>Зарабатывайте на продаже и доставке</h2>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <img src="images/slider/slide3.jpg" alt="slider image 3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="slider-caption">
+                                <h2>Геолокация - ищите продукты у дома</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <img src="images/slider/slide4.jpg" alt="slider image 4">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="slider-caption">
+                                <h2>Откройте магазин не выходя из квартиры</h2>
+								</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <img src="images/slider/slide5.jpg" alt="slider image 5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <div class="slider-caption">
+                                <h2>Отдавайте ненужное, а не выбрасывайте</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+	</div>
+</div>	<!-- /.bxslider -->
+
+
+    <div id="services" class="content-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-item">
+                        <span class="service-icon first"></span>
+                        <h3>{{ title1}} </h3>
+                        <p>{{ about1}}  </p>
+                    </div> <!-- /.service-item -->
+                </div> <!-- /.col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-item">
+                        <span class="service-icon second"></span>
+                        <h3>{{ title2}} </h3>
+                        <p>{{ about2}}  </p>
+                    </div> <!-- /.service-item -->
+                </div> <!-- /.col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-item">
+                        <span class="service-icon third"></span>
+                       <h3>{{ title3}} </h3>
+                        <p>{{ about3}}  </p>
+                    </div> <!-- /.service-item -->
+                </div> <!-- /.col-md-3 -->
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-item">
+                        <span class="service-icon fourth"></span>
+                        <h3>{{ title4}} </h3>
+                        <p>{{ about4}}  </p>
+                    </div> <!-- /.service-item -->
+                </div> <!-- /.col-md-3 -->
+            </div> <!-- /.row -->
+
+        </div> <!-- /.container -->
+    </div> <!-- /#services -->
+
+
+
+
+<div class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6">
+                    <span>
+                    	Copyright &copy; 2015 <a href="#">Getfood LTD</a>
+                        | Design: <a rel="nofollow" href="#" target="_parent">noDezigN</a>
+                    </span>
+
+            </div> <!-- /.col-md-6 -->
+                <div class="col-md-4 col-sm-6">
+                    <ul class="social">
+                        <li><a href="#" class="fa fa-facebook"></a></li>
+                        <li><a href="#" class="fa fa-twitter"></a></li>
+                        <li><a href="#" class="fa fa-instagram"></a></li>
+                        <li><a href="#" class="fa fa-linkedin"></a></li>
+                        <li><a href="#" class="fa fa-rss"></a></li>
+                    </ul>
+
+                </div> <!-- /.col-md-6 -->
+            </div> <!-- /.row -->
+
+        </div> <!-- /.container -->
+    </div> <!-- /.site-footer -->
+
+
+   	<script src="js/MainController.js"></script>
+	<script src="js/bigSlider.js"></script>
+
+
+
+
+<script type="text/javascript">
+
+function dhtmlLoadScript(url)
+{
+   var e = document.createElement("script");
+   e.src = url;
+   e.type="text/javascript";
+   document.getElementsByTagName("head")[0].appendChild(e);
+};
+
+function showMap() {
+	$('.site-slider').hide();
+	$('#map').css("height", "100%");
+	$('html, body').animate({ scrollTop: $('#map').offset().top }, 300);
+	$('#btn-map').hide();
+	$('#btn-services').hide();
+	$('#services').hide();
+	$('.site-footer').hide();
+	$('#btn-home').removeClass("hidden");
+	$('#btn-add').removeClass("hidden");
+	$('#btn-near').removeClass("hidden");
+
+	dhtmlLoadScript("js/initMap.js");
+
+};
+function showNearFood() {
+
+	$.getJSON('./data', function (data) {
+
+		map.data.addGeoJson(data);
+	    map.data.setStyle({
+			icon: '/images/favicon.ico',
+			fillColor: 'green',
+
+		});
+	});
+
+};
+
+function addUser() {
+	var data = {};
+	data.username = "123";
+	data.password = "123";
+	data.position = pos;
+	$.post('./users', data, function(data, status) {
+		alert("Data: " + JSON.stringify(data) + "\nStatus: " + status + ' position' + JSON.stringify(pos));
+	});
+
+ };
+
+ $(function() {
+
+     var $formLogin = $('#login-form');
+     var $formLost = $('#lost-form');
+     var $formRegister = $('#register-form');
+     var $divForms = $('#div-forms');
+     var $modalAnimateTime = 300;
+     var $msgAnimateTime = 150;
+     var $msgShowTime = 2000;
+     $("form").submit(function () {
+         switch(this.id) {
+             case "login-form":
+                 var $lg_username=$('#login_username').val();
+                 var $lg_password=$('#login_password').val();
+                 if ($lg_username == "ERROR") {
+                     msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Ошибка авторизации");
+                 } else {
+                     msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", "Вход на сайт произведен");
+                 }
+                 return false;
+                 break;
+             case "lost-form":
+                 var $ls_email=$('#lost_email').val();
+                 if ($ls_email == "ERROR") {
+                     msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "error", "glyphicon-remove", "Ошибка отправки");
+                 } else {
+                     msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "success", "glyphicon-ok", "Письмо отправлено");
+                 }
+                 return false;
+                 break;
+             case "register-form":
+                 var $rg_username=$('#register_username').val();
+                 var $rg_email=$('#register_email').val();
+                 var $rg_password=$('#register_password').val();
+                 if ($rg_username == "ERROR") {
+                     msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "error", "glyphicon-remove", "Ошибка регистрации");
+                 } else {
+                     msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "success", "glyphicon-ok", "Регистрация завершена");
+                 }
+                 return false;
+                 break;
+             default:
+                 return false;
+         }
+         return false;
+     });
+
+     $('#login_register_btn').click( function () { modalAnimate($formLogin, $formRegister) });
+     $('#register_login_btn').click( function () { modalAnimate($formRegister, $formLogin); });
+     $('#login_lost_btn').click( function () { modalAnimate($formLogin, $formLost); });
+     $('#lost_login_btn').click( function () { modalAnimate($formLost, $formLogin); });
+     $('#lost_register_btn').click( function () { modalAnimate($formLost, $formRegister); });
+     $('#register_lost_btn').click( function () { modalAnimate($formRegister, $formLost); });
+
+     function modalAnimate ($oldForm, $newForm) {
+         var $oldH = $oldForm.height();
+         var $newH = $newForm.height();
+         $divForms.css("height",$oldH);
+         $oldForm.fadeToggle($modalAnimateTime, function(){
+             $divForms.animate({height: $newH}, $modalAnimateTime, function(){
+                 $newForm.fadeToggle($modalAnimateTime);
+             });
+         });
+     }
+
+     function msgFade ($msgId, $msgText) {
+         $msgId.fadeOut($msgAnimateTime, function() {
+             $(this).text($msgText).fadeIn($msgAnimateTime);
+         });
+     }
+
+     function msgChange($divTag, $iconTag, $textTag, $divClass, $iconClass, $msgText) {
+         var $msgOld = $divTag.text();
+         msgFade($textTag, $msgText);
+         $divTag.addClass($divClass);
+         $iconTag.removeClass("glyphicon-chevron-right");
+         $iconTag.addClass($iconClass + " " + $divClass);
+         setTimeout(function() {
+             msgFade($textTag, $msgOld);
+             $divTag.removeClass($divClass);
+             $iconTag.addClass("glyphicon-chevron-right");
+             $iconTag.removeClass($iconClass + " " + $divClass);
+           }, $msgShowTime);
+     }
+ });
+
+
+
+</script>
+
+
+
+</body>
+</html>
