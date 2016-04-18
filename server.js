@@ -24,6 +24,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'));
+require('./app/router/routes.js')(app);
+require('./app/auth/routes')(app, passport);
+
 app.use(function(req, res, next) {
   res.setHeader('Content-type', 'application/json');
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -32,8 +35,7 @@ app.use(function(req, res, next) {
 	next();
 });
 
-require('./app/router/routes.js')(app);
-require('./app/auth/routes')(app, passport);
+
 
 app.get('/', function(req, res) {
   res.send(JSON.stringify(req.session.passport)).end();
