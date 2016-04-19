@@ -25,7 +25,7 @@ function initMap() {
 
   var styledMap = new google.maps.StyledMapType(styles,
     {name: "Styled Map"});
-	
+
   map = new google.maps.Map(document.getElementById('map'), {
     disableDefaultUI: true,
     zoom: 14,
@@ -41,17 +41,17 @@ function initMap() {
     navigator.geolocation.getCurrentPosition(function(position) {
       pos = {
         lng: position.coords.longitude,
-		lat: position.coords.latitude
+				lat: position.coords.latitude
       };
 	currentPositionMarker = new google.maps.Marker({
     position: pos,
     title:"Вы где-то тут",
 	draggable: true,
-	
+
 });
 
 currentPositionMarker.setMap(map);
-     
+
       map.setCenter(pos);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
@@ -65,9 +65,9 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setContent(browserHasGeolocation ?
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
-} 
+}
 
 
 
 };
-initMap(); 
+initMap();

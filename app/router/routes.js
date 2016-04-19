@@ -11,13 +11,15 @@ module.exports = function(app) {
 	// food routes
 	app.get('/foods', function(req, res){
 		console.log('START answer for GET= ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
-
+		var coords = [];
+    coords[0] = req.query.lng;
+    coords[1] = req.query.lat;
+		var maxDistance = req.query.maxdist;
 		Food.find({
 			location: {
-				$near: [30.491008758544922, 50.476079378950324],
-		     $maxDistance: 50000000,
-		     $minDistance: 1
-			 }
+         $near: coords,
+         $maxDistance: maxDistance
+       }
 		}, function(err, foods) {
 			res.status(200).json(foods);
 			res.end();

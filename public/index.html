@@ -310,24 +310,34 @@ function showMap() {
 
 
 function getfood() {
-    var data = pos;
-    $.get('./foods', data, function (data) {
-      console.log(JSON.stringify(data));
+    var maxdist = 1;
+    $.get('./foods', pos, function (data) {
+
+      data.forEach(function(item, i, arr) {
+        console.log(data[i].location.toString());
+        console.log(data[i].name.toString());
+        // var marker = new google.maps.Marker({
+        //   position: myLatlng,
+        //   map: map,
+        //   title: markername
+        // });
+        // marker.setMap(map);
+      });
 
 
 	});
 };
 
-function add1food() {
-	var data = {};
-  data.name = "222ewrwer";
-  data.location = ["30.502166748046875","50.454553144914776"];
-
-	$.post('./foods', data, function(data, status) {
-		alert("post food" + JSON.stringify(data));
-	});
-
- };
+// function add1food() {
+// 	var data = {};
+//   data.name = "222ewrwer";
+//   data.location = ["30.502166748046875","50.454553144914776"];
+//
+// 	$.post('./foods', data, function(data, status) {
+// 		alert("post food" + JSON.stringify(data));
+// 	});
+//
+//  };
 
 
 function addUser() {
