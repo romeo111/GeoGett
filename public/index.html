@@ -34,6 +34,7 @@
             <div class="row" >
 				          <div class="col-xs-3 col-md-4">  <a href="http://localhost:8080/">
 					               <span ><h1>Кругом еда</a><br> </h1>
+
                   </div>
 
 
@@ -44,11 +45,11 @@
 
 						<a id="btn-home" href="index.html" class="btn btn-success btn-block hidden" role="button">Главная страница</a>
 						<a id="btn-map" class="btn btn-default btn-block" role="button" onclick="showMap()">Карта с едой</a>
-						<a id ="btn-gtfd"  class="btn btn-info btn-block" role="button" onclick="getfood()">get food</a>
-						<a id="btn-login" class="btn btn-warning btn-block" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a>
-      			<a id="btn-near" class="btn btn-danger btn-block hidden" role="button" onclick="showNearFood()">from map.geojson</a>
+						<a id ="btn-gtfd"  class="btn btn-info btn-block hidden" role="button" onclick="getfood()">get food</a>
+						<a id="btn-login" class="btn btn-success btn-block" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a>
 
 						</span>
+
             <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -299,8 +300,9 @@ function showMap() {
 	$('#services').hide();
 	$('.site-footer').hide();
 	$('#btn-home').removeClass("hidden");
-	$('#btn-add').removeClass("hidden");
 	$('#btn-near').removeClass("hidden");
+  $('#btn-gtfd').removeClass("hidden");
+
 
 	dhtmlLoadScript("js/initMap.js");
 
@@ -308,13 +310,25 @@ function showMap() {
 
 
 function getfood() {
-  var data = {};
-    data.position = pos;
+    var data = pos;
     $.get('./foods', data, function (data) {
-      alert("Data: " + JSON.stringify(data) + "\nStatus: " + status + ' position' + JSON.stringify(pos));
+      console.log(JSON.stringify(data));
+
 
 	});
 };
+
+function add1food() {
+	var data = {};
+  data.name = "222ewrwer";
+  data.location = ["30.502166748046875","50.454553144914776"];
+
+	$.post('./foods', data, function(data, status) {
+		alert("post food" + JSON.stringify(data));
+	});
+
+ };
+
 
 function addUser() {
 	var data = {};

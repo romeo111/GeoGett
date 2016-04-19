@@ -4,7 +4,7 @@ const db = require('../service/database');
 const Schema = db.Schema;
 
 const LocationSchema = new Schema({
-  location: { type: {}, index: '2dsphere', sparse: true },
+  location: { type: [], index: '2dsphere', sparse: true },
 	city: String,
   name: String,
   address: String
@@ -23,4 +23,6 @@ const LocationSchema = new Schema({
     next();
   });
 
-module.exports = db.model('Location', LocationSchema);
+
+const Location = db.model('Location', LocationSchema);
+module.exports = Location;

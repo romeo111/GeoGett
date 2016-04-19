@@ -2,7 +2,7 @@
 
 const db = require('../service/database');
 const Schema = db.Schema;
-const LocationSchema = require('./location');
+//const LocationSchema = require('./location');
 const DateIntervalSchema = require('./DateInterval');
 const FoodSchema = require('./food');
 
@@ -13,7 +13,7 @@ const UserSchema = new Schema({
   connected : { type: Date, default : Date.now },
   created   : { type: Date, default: Date.now },
   foods: [FoodSchema],
-  position: [LocationSchema],
+  position: {type: [Number], index: '2d'},
 
   twitter : {
     id    : String,

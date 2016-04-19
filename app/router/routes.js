@@ -10,40 +10,42 @@ module.exports = function(app) {
 
 	// food routes
 	app.get('/foods', function(req, res){
+		console.log('START answer for GET= ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
 
-			console.log(JSON.stringify(req.body));
-      var query = Food.find({
-		     		location:
-		       	{ $near :
-		          {
-		            $geometry: { type: "Point",  coordinates: [ -73.9667, 40.78 ] },
-		            $minDistance: 1,
-		            $maxDistance: 1000
-		          }
-		       }
-		   });
-
-
-
-
-
-
-        query.exec(function(err, foods){
-            if(err) {res.send(err); return;}
-      	res.json(foods);
-				console.log(res.headersSent + ": res.headersSent ");
+		Food.find({
+			location: {
+				$near: [30.491008758544922, 50.476079378950324],
+		     $maxDistance: 50000000,
+		     $minDistance: 1
+			 }
+		}, function(err, foods) {
+			res.status(200).json(foods);
 			res.end();
-        });
-    });
+			console.log('answer for GET' + JSON.stringify(foods));
+		});
+	});
+
+
 
 	app.post('/foods', function(req, res){
-		console.log(req.body);
-        var newfood = new Food(req.body);
-        newfood.save(function(err){
-            if(err) {res.send(err); return;}
-            console.log(res.headersSent);
-			res.json(req.body);
+
+    var newfood = new Food();
+			newfood.name = req.body.name;
+			newfood.location = req.body.location;
+
+    newfood.save(function(err){
+      if(err) {
+				console.log('errorrr');
+				res.send(err); return;}
+
+				res.json(req.body);
+      console.log("saved food!" + res.headersSent);
+
+			console.log("req.body: " + JSON.stringify(req.body) + "req.query: " + JSON.stringify(req.query));
+
         });
+
+
     });
 
 

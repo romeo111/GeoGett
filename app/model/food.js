@@ -2,14 +2,15 @@
 
 const db = require('../service/database');
 const Schema = db.Schema;
-const LocationSchema = require('./location');
+//const LocationSchema = require('./location');
 const DateIntervalSchema = require('./DateInterval');
-
+const UserSchema = require('./user');
 const FoodSchema = new Schema({
 
   name: {type: String, required: true},
+  owner: [UserSchema],
   photo: String,
-  location: [LocationSchema],
+  location: {type: [Number], index: '2d'},
   livetime: [DateIntervalSchema],
   living:  Boolean,
   weight: Number,
@@ -19,7 +20,7 @@ const FoodSchema = new Schema({
 
   });
   FoodSchema.pre('save', function(next){
-      now = new Date();
+      var now = new Date();
       this.updated_at = now;
       if(!this.created_at) {
           this.created_at = now
