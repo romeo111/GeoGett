@@ -53,12 +53,22 @@ function initMap() {
         lng: position.coords.longitude,
 				lat: position.coords.latitude
       };
+
 	currentPositionMarker = new google.maps.Marker({
     position: pos,
     title:"Вы где-то тут",
-	draggable: true,
-
+	   draggable: true,
+     icon: {
+        url: 'images/location.svg',
+        scaledSize: new google.maps.Size(40, 40) // pixels
+      }
 });
+
+google.maps.event.addListener(currentPositionMarker, 'dragend', function() {
+  pos.lat = currentPositionMarker.getPosition().lat();
+  pos.lng = currentPositionMarker.getPosition().lng();
+  map.setCenter(pos);
+   });
 
 currentPositionMarker.setMap(map);
 
