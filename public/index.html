@@ -45,7 +45,12 @@
 
 						<a id="btn-home" href="index.html" class="btn btn-success btn-block hidden" role="button">Главная страница</a>
 						<a id="btn-map" class="btn btn-default btn-block" role="button" onclick="showMap()">Карта с едой</a>
-						<a id ="btn-gtfd"  class="btn btn-info btn-block hidden" role="button" onclick="getfood()">get food</a>
+              <div id ="btn-gtfd" class="btn-group hidden" role="group" aria-label=Дистанция">
+                <button type="button" class="btn btn-default" onclick="getfood(1)">1km</button>
+                <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
+                <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
+              </div>
+						<a id ="btn-gtfd"  class="btn btn-info btn-block hidden" role="button" onclick="getfood(5)">get food 5</a>
 						<a id="btn-login" class="btn btn-success btn-block" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a>
 
 						</span>
@@ -292,7 +297,10 @@ function dhtmlLoadScript(url)
 };
 
 function showMap() {
-	$('.site-slider').hide();
+
+  dhtmlLoadScript("js/initMap.js");
+
+  $('.site-slider').hide();
 	$('#map').css("height", "100%");
 	$('html, body').animate({ scrollTop: $('#map').offset().top }, 300);
 	$('#btn-map').hide();
@@ -300,33 +308,13 @@ function showMap() {
 	$('#services').hide();
 	$('.site-footer').hide();
 	$('#btn-home').removeClass("hidden");
-	$('#btn-near').removeClass("hidden");
+//$('#btn-near').removeClass("hidden");
   $('#btn-gtfd').removeClass("hidden");
-
-
-	dhtmlLoadScript("js/initMap.js");
-
 };
 
 
-function getfood() {
-    var maxdist = 1;
-    $.get('./foods', pos, function (data) {
-
-      data.forEach(function(item, i, arr) {
-        console.log(data[i].location.toString());
-        console.log(data[i].name.toString());
-        // var marker = new google.maps.Marker({
-        //   position: myLatlng,
-        //   map: map,
-        //   title: markername
-        // });
-        // marker.setMap(map);
-      });
 
 
-	});
-};
 
 // function add1food() {
 // 	var data = {};
@@ -340,16 +328,16 @@ function getfood() {
 //  };
 
 
-function addUser() {
-	var data = {};
-	data.username = "123";
-	data.password = "123";
-	data.position = pos;
-	$.post('./users', data, function(data, status) {
-		alert("Data: " + JSON.stringify(data) + "\nStatus: " + status + ' position' + JSON.stringify(pos));
-	});
-
- };
+// function addUser() {
+// 	var data = {};
+// 	data.username = "123";
+// 	data.password = "123";
+// 	data.position = pos;
+// 	$.post('./users', data, function(data, status) {
+// 		alert("Data: " + JSON.stringify(data) + "\nStatus: " + status + ' position' + JSON.stringify(pos));
+// 	});
+//
+//  };
 
  $(function() {
 

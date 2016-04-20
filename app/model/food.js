@@ -8,9 +8,10 @@ const UserSchema = require('./user');
 const FoodSchema = new Schema({
 
   name: {type: String, required: true},
+  location: {type: [Number], index: '2d', required: true},
   owner: [UserSchema],
   photo: String,
-  location: {type: [Number], index: '2d'},
+  category: String,
   livetime: [DateIntervalSchema],
   living:  Boolean,
   weight: Number,

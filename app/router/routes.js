@@ -12,9 +12,9 @@ module.exports = function(app) {
 	app.get('/foods', function(req, res){
 		console.log('START answer for GET= ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
 		var coords = [];
-    coords[0] = req.query.lng;
-    coords[1] = req.query.lat;
-		var maxDistance = req.query.maxdist;
+    coords[0] = req.query.pos.lng;
+    coords[1] = req.query.pos.lat;
+		var maxDistance = req.query.maxdist/111.12;
 		Food.find({
 			location: {
          $near: coords,

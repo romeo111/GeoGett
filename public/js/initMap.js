@@ -1,4 +1,14 @@
-var map, pos, currentPositionMarker;
+var map, pos, currentPositionMarker, foodName, food, foodLatlng;
+var markersArray = [];
+
+
+function clearOverlays() {
+  for (var i = 0; i < markersArray.length; i++ ) {
+    markersArray[i].setMap(null);
+  }
+  markersArray.length = 0;
+}
+
 function initMap() {
 
 	var styles = [
@@ -29,8 +39,8 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     disableDefaultUI: true,
     zoom: 14,
-	mapTypeControlOptions: {
-      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+		mapTypeControlOptions: {
+    mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
     }
 	 });
 
@@ -66,8 +76,34 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
 }
+};
 
 
 
+function getfood(maxdist) {
+
+    var sendData = {};
+    sendData.pos = pos;
+    sendData.maxdist = maxdist;
+    console.log(JSON.stringify(sendData));
+
+    $.get('./foods', sendData, function (data) {
+			clearOverlays();
+      data.forEach(function(item, i, arr) {
+         foodLatlng = new google.maps.LatLng(data[i].location[1].toString(), data[i].location[0].toString());
+         foodName = data[i].name.toString();
+         food = new google.maps.Marker({
+          position: foodLatlng,
+          title: foodName,
+					map: map
+        });
+				markersArray.push(food);
+				google.maps.event.addListener(food,"click",function(){});
+				food.setMap(map);
+
+
+
+      });
+	});
 };
 initMap();
