@@ -45,7 +45,7 @@
 
 						<a id="btn-home" href="index.html" class="btn btn-success btn-block hidden" role="button">Главная страница</a>
 						<a id="btn-map" class="btn btn-default btn-block" role="button" onclick="showMap()">Карта с едой</a>
-              <div id ="btn-gtfd" class="btn-group hidden" role="group" aria-label=Дистанция">
+              <div id ="btn-gtfd" class="btn-group hidden" role="group" aria-label="Дистанция">
                 <button type="button" class="btn btn-default" onclick="getfood(1)">1km</button>
                 <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
                 <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
@@ -56,32 +56,47 @@
 
 						</span>
 
-            <div id="add_form"><!-- Сaмo oкнo -->
-                  <span id="modal_close">Закрыть</span> <!-- Кнoпкa зaкрыть -->
-                  <p>Добавить свою еду на карту GeoGett</p>
-            <div class="form-group">
+            <div id="add_form" class="form-group">
+                  <span id="modal_close">>>Х<<</span>
+            <h4>Добавить свою еду на карту GeoGett</h4>
+            <form role="form">
+
               <label for="foodname">Назовите ваш товар:</label>
-              <input type="text" class="form-control" id="foodname">
-            </div>
-              <form role="form">
+              <input type="text" class="form-control" name="foodname">
+
+
+                <label>Категория товара:</label>
                 <label class="radio-inline">
-                  <input type="radio" name="optradio">Самовывоз
+                  <input type="radio" name="serving ">Готовое блюдо
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="optradio">Самовывоз и доставка от продавца
+                  <input type="radio" name="grocery">Продукты
                 </label>
-              </form>
-              <label for="sel1">Категория товара:</label>
-              <select class="form-control" id="sel1">
-                <option>Готовое блюдо</option>
-                <option>Товар длительного хранения</option>
-              </select>
 
+              <label>Доставка:</label>
+              <label class="checkbox-inline">
+                  <input type="checkbox"  name="selfdelivery" checked disabled>Самовывоз</label>
+              <label class="checkbox-inline">
+                <input type="checkbox" name="delivery">Доставка</label> <br>
 
+              <label class="btn btn-primary" for="my-file-selector">
+                  <input id="my-file-selector" type="file" style="display:none;">
+                  Добавить фото товара..
+              </label><br>
 
+              <label for="comment">Комментарий к товару:</label>
+
+              <textarea class="form-control" rows="3" name="comment">
+              </textarea>
+
+            <input type="submit" value="ДОБАВИТЬ" onclick="submit">
+
+            <a id="btn-add" class="btn btn-block " role="button"
+            onclick="submitAddfood()">Добавить2</a>
+
+            </form>
             </div>
 
-            </div>
             <div id="overlay"></div><!-- Пoдлoжкa -->
 
             <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -171,16 +186,11 @@
                     </div>
                 </div>
 
-				</div><!-- end container -->
+			</div><!-- end container -->
       </div><!-- end row -->
-        </div> <!-- end header -->
-
-
-
-
+      </div> <!-- end header -->
 
 <div id="map" class="map"></div>
-
 <div id="bigSlider">
     <div class="site-slider">
         <ul class="bxslider hidden-xs">
@@ -280,10 +290,6 @@
 
         </div> <!-- /.container -->
     </div> <!-- /#services -->
-
-
-
-
 <div class="site-footer">
         <div class="container">
             <div class="row">
@@ -313,9 +319,6 @@
   <script src="js/MainController.js"></script>
 	<script src="js/bigSlider.js"></script>
 
-
-
-
 <script type="text/javascript">
 
 function dhtmlLoadScript(url)
@@ -344,7 +347,33 @@ function showMap() {
   $('#btn-gtfd').removeClass("hidden");
 };
 
+function submitAddfood() {
+    document.getElementById("add_form").submit();
+};
 
+$( "#add_form" ).submit(function( event ) {
+
+  event.preventDefault();
+  var newFood = {};
+  var $form = $(this);
+    newFood.foodname = $form.find( "input[name='foodnname']" ).val(),
+    newFood.serving = $form.find( "input[name='serving']" ).is(':checked'),
+    newFood.grocery = $form.find( "input[name='grocery']" ).is(':checked'),
+    newFood.delivery = $form.find( "input[name='delivery']" ).is(':checked'),
+    newFood.location = pos,
+    newFood.comment = $form.find( "input[name='delivery']" ).val();
+
+
+
+
+  // Send the data using post
+  var posting = $.post('./addfood', newFood );
+
+  // Put the results in a div
+  posting.done(function( data ) {
+    alert('send data' + JSON.stringify(newFood));
+  });
+});
 
 
 

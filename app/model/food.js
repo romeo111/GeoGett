@@ -16,6 +16,7 @@ const FoodSchema = new Schema({
   living:  Boolean,
   weight: Number,
   quantity: Number,
+  comment: String,
   created_at: {type: Date, default: Date.now},
   updated_at: {type: Date, default: Date.now}
 

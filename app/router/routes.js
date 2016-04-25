@@ -29,8 +29,8 @@ module.exports = function(app) {
 
 
 
-	app.post('/foods', function(req, res){
-
+	app.post('/addfood', function(req, res){
+		console.log('take POST query');
     var newfood = new Food();
 			newfood.name = req.body.name;
 			newfood.location = req.body.location;
