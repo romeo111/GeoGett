@@ -11,6 +11,8 @@ const FoodSchema = new Schema({
   location: {type: [Number], index: '2d', required: true},
   owner: [UserSchema],
   photo: String,
+  serving: Boolean,
+  grocery: Boolean,
   category: String,
   livetime: [DateIntervalSchema],
   living:  Boolean,
@@ -31,4 +33,5 @@ const FoodSchema = new Schema({
   });
 
 const Food = db.model('Food', FoodSchema);
+
 module.exports = Food;

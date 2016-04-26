@@ -109,9 +109,7 @@ var contentString = '<div id="content">'+
      '</div>'+
      '</div>';
 
- var infowindow = new google.maps.InfoWindow({
-   content: contentString
- });
+
 
 
 
@@ -132,20 +130,10 @@ function getfood(maxdist) {
           position: foodLatlng,
           title: foodName,
 					map: map
-        });
-				markersArray.push(food);
-				google.maps.event.addListener(food,"click",function(){
-
-              infowindow.open(map, food);
           });
-
-
-        });
+				markersArray.push(food);
+    });
 				food.setMap(map);
-
-
-
-      });
-
+  });
 };
 initMap();

@@ -62,22 +62,22 @@
             <form role="form">
 
               <label for="foodname">Назовите ваш товар:</label>
-              <input type="text" class="form-control" name="foodname">
+              <input type="text" name="foodname" id="foodname">
 
 
                 <label>Категория товара:</label>
                 <label class="radio-inline">
-                  <input type="radio" name="serving ">Готовое блюдо
+                  <input type="radio" name="serving " id="serving">Готовое блюдо
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="grocery">Продукты
+                  <input type="radio" name="grocery" id="grocery">Продукты
                 </label>
 
               <label>Доставка:</label>
               <label class="checkbox-inline">
-                  <input type="checkbox"  name="selfdelivery" checked disabled>Самовывоз</label>
+                  <input type="checkbox"  name="selfdelivery"  checked disabled>Самовывоз</label>
               <label class="checkbox-inline">
-                <input type="checkbox" name="delivery">Доставка</label> <br>
+                <input type="checkbox" name="delivery" id="delivery">Доставка</label> <br>
 
               <label class="btn btn-primary" for="my-file-selector">
                   <input id="my-file-selector" type="file" style="display:none;">
@@ -85,14 +85,12 @@
               </label><br>
 
               <label for="comment">Комментарий к товару:</label>
-
-              <textarea class="form-control" rows="3" name="comment">
+              <textarea class="form-control" rows="3" name="comment" id="comment">
               </textarea>
 
-            <input type="submit" value="ДОБАВИТЬ" onclick="submit">
+            <input id="foodSubmit" type="submit" value="ДОБАВИТЬ" >
 
-            <a id="btn-add" class="btn btn-block " role="button"
-            onclick="submitAddfood()">Добавить2</a>
+
 
             </form>
             </div>
@@ -347,33 +345,28 @@ function showMap() {
   $('#btn-gtfd').removeClass("hidden");
 };
 
-function submitAddfood() {
-    document.getElementById("add_form").submit();
-};
-
-$( "#add_form" ).submit(function( event ) {
+document.getElementById("foodSubmit").addEventListener("click", function(){
 
   event.preventDefault();
   var newFood = {};
-  var $form = $(this);
-    newFood.foodname = $form.find( "input[name='foodnname']" ).val(),
-    newFood.serving = $form.find( "input[name='serving']" ).is(':checked'),
-    newFood.grocery = $form.find( "input[name='grocery']" ).is(':checked'),
-    newFood.delivery = $form.find( "input[name='delivery']" ).is(':checked'),
-    newFood.location = pos,
-    newFood.comment = $form.find( "input[name='delivery']" ).val();
+    console.log(JSON.stringify(pos));
+    newFood.foodname = $('#foodname').val();
+    newFood.serving = $('#serving').is(':checked');
+    newFood.grocery = $('#grocery').is(':checked');
+    newFood.delivery = $('#delivery').is(':checked');
+    newFood.location = [];
+    newFood.location[0] = parseFloat(pos.lng);
+    newFood.location[1] = parseFloat(pos.lat);
+    newFood.comment = $('#comment').val();
 
-
-
-
-  // Send the data using post
   var posting = $.post('./addfood', newFood );
 
-  // Put the results in a div
   posting.done(function( data ) {
     alert('send data' + JSON.stringify(newFood));
   });
 });
+
+
 
 
 
