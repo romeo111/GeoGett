@@ -1,5 +1,6 @@
 var map, pos, currentPositionMarker, foodName, food, foodLatlng;
 var markersArray = [];
+var foodInfowindowArray = [];
 
 
 function clearOverlays() {
@@ -15,13 +16,13 @@ function initMap() {
     {
       stylers: [
         { hue: "#00ffe6" },
-        { saturation: -20 }
+        { saturation: -10 }
       ]
     },{
       featureType: "road",
       elementType: "geometry",
       stylers: [
-        { lightness: 60 },
+        { lightness: 70 },
         { visibility: "simplified" }
       ]
     },{
@@ -54,9 +55,9 @@ function initMap() {
 				lat: position.coords.latitude
       };
 
-	currentPositionMarker = new google.maps.Marker({
+var	currentPositionMarker = new google.maps.Marker({
     position: pos,
-    title:"Вы где-то тут",
+    title:"Уточните свое местоположение перетягиванием маркера",
 	   draggable: true,
      icon: {
         url: 'images/location.svg',
@@ -88,32 +89,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 };
 
-var contentString = '<div id="content">'+
-     '<div id="siteNotice">'+
-     '</div>'+
-     '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-     '<div id="bodyContent">'+
-     '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-     'sandstone rock formation in the southern part of the '+
-     'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-     'south west of the nearest large town, Alice Springs; 450&#160;km '+
-     '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-     'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-     'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-     'Aboriginal people of the area. It has many springs, waterholes, '+
-     'rock caves and ancient paintings. Uluru is listed as a World '+
-     'Heritage Site.</p>'+
-     '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-     'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-     '(last visited June 22, 2009).</p>'+
-     '</div>'+
-     '</div>';
-
-
-
-
-
-
 function getfood(maxdist) {
 
     var sendData = {};
@@ -131,9 +106,27 @@ function getfood(maxdist) {
           title: foodName,
 					map: map
           });
-				markersArray.push(food);
+      var popupContent = '<div id="locationContent">' +
+                            '<div>' + foodName + '</div>' +
+                            '<div>' + foodLatlng + '</div>' +
+                            '<div>' + data[i].comment.toString() + '</div>' +
+                            // '<div><a href="' + data[i].owner + '">See This Story >></a></div>' +
+                            // '<div><img width="250" src="' + data[i].photoURL.toString() + '" /></div>' +
+                        '</div>';
+      createInfoWindow(food, popupContent);
+			markersArray.push(food);
+
     });
-				food.setMap(map);
+
   });
+  var infoWindow = new google.maps.InfoWindow();
+  function createInfoWindow(marker, popupContent) {
+        google.maps.event.addListener(food, 'click', function () {
+            infoWindow.setContent(popupContent);
+            infoWindow.open(map, this);
+  });
+}
+
+
 };
 initMap();

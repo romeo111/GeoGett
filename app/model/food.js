@@ -10,7 +10,7 @@ const FoodSchema = new Schema({
   name: {type: String, required: true},
   location: {type: [Number], index: '2d', required: true},
   owner: [UserSchema],
-  photo: String,
+  photoURL: String,
   serving: Boolean,
   grocery: Boolean,
   category: String,
