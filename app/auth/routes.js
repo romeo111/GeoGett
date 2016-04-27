@@ -35,7 +35,7 @@ module.exports = function(app, passport) {
 
   app.get('/api/user/me', function (req, res) {
     if (!req.user) {
-      return res.send({}).end();
+      return res.send('no user').end();
     }
 
     if (!req.user.email) {
