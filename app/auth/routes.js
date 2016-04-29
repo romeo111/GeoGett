@@ -74,4 +74,11 @@ module.exports = function(app, passport) {
     function(req, res) {
       res.redirect('/');
     });
-}
+
+    app.get('/sign-out', function (req, res) {
+       req.logout();
+       res.redirect('/');
+   });
+
+
+} // end exports

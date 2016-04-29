@@ -4,15 +4,20 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const VKontakteStrategy = require('passport-vkontakte').Strategy;
-// my local
 const LocalStrategy = require('passport-local').Strategy;
+const Twitter  = require('./twitter');
+const Facebook = require('./facebook');
+const Vkontakte = require('./vkontakte');
 
-  passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
+const callBackPath = process.env.DOMAIN + 'api/auth/';
+
+
+passport.use(new LocalStrategy(
+  function(phone, password, done) {
+    User.findOne({ phone: phone }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+        return done(null, false, { message: 'Incorrect phone.' });
       }
       if (user.password != password) { return done(null, false, { message: 'Invalid password' });
       }
@@ -21,11 +26,7 @@ const LocalStrategy = require('passport-local').Strategy;
   }
 ));
 // my local
-const Twitter  = require('./twitter');
-const Facebook = require('./facebook');
-const Vkontakte = require('./vkontakte');
 
-const callBackPath = process.env.DOMAIN + 'api/auth/';
 
 passport.use(
   new FacebookStrategy({

@@ -8,9 +8,9 @@ const FoodSchema = require('./food');
 
 
 const UserSchema = new Schema({
-  email     : String,
-  phone     : String,
-  connected : { type: Date, default : Date.now },
+  username  : { type: String, required: true },
+  email     : { type: String, unique: true },
+  phone     : { type: String, required: true, unique: true },
   created   : { type: Date, default: Date.now },
   foods: [FoodSchema],
   position: {type: [Number], index: '2d'},
@@ -34,6 +34,8 @@ const UserSchema = new Schema({
     image : String
   }
 });
+UserSchema.path('email').index({ unique: true });
+UserSchema.path('phone').index({ unique: true });
 UserSchema.pre('save', function(next){
     now = new Date();
     this.updated_at = now;

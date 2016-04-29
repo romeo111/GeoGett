@@ -9,7 +9,7 @@ const FoodSchema = new Schema({
 
   name: {type: String, required: true},
   location: {type: [Number], index: '2d', required: true},
-  owner: [UserSchema],
+  owner: { type: [UserSchema], required: true},
   photoURL: String,
   serving: Boolean,
   grocery: Boolean,
@@ -23,6 +23,7 @@ const FoodSchema = new Schema({
   updated_at: {type: Date, default: Date.now}
 
   });
+
   FoodSchema.pre('save', function(next){
       var now = new Date();
       this.updated_at = now;

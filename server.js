@@ -23,7 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
+app.set('view engine', 'jade');
 app.use(function(req, res, next) {
   res.setHeader('Content-type', 'application/json');
 	res.setHeader('Access-Control-Allow-Origin', '*');
