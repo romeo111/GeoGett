@@ -31,6 +31,21 @@
 <body  ng-controller="MainController">
     <div class="site-header"  >
         <div class="container">
+
+            <form id="loginForm" action="/login" class="form-inline" method="post">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" name="phone" id="phone"/>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="text" name="password" id="password"/>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Log In"/>
+                </div>
+            </form>
+
             <div class="row" >
 				          <div class="col-xs-3 col-md-4">  <a href="http://localhost:8080/">
 					               <span ><h1>Кругом еда</a><br> </h1>
@@ -67,7 +82,7 @@
 
                 <label>Категория товара:</label>
                 <label class="radio-inline">
-                  <input type="radio" name="serving " id="serving">Готовое блюдо
+                  <input type="radio" name="serving" id="serving">Готовое блюдо
                 </label>
                 <label class="radio-inline">
                   <input type="radio" name="grocery" id="grocery">Продукты
@@ -367,31 +382,24 @@ document.getElementById("foodSubmit").addEventListener("click", function(){
 });
 
 
+$( "#loginForm" ).submit(function( event ) {
+  alert( "Handler for .submit() loginForm called." + $('#phone').val() +  $('#password').val() );
 
+  // Stop form from submitting normally
+  //event.preventDefault();
+  var loginData = {},
+  phone = $('#phone').val();
+  password = $('#password').val();
 
+ console.log(phone, passport);
+        /* Send the data using post */
+        var posting = $.post('/login', {phone: phone, password: password});
 
-// function add1food() {
-// 	var data = {};
-//   data.name = "222ewrwer";
-//   data.location = ["30.502166748046875","50.454553144914776"];
-//
-// 	$.post('./foods', data, function(data, status) {
-// 		alert("post food" + JSON.stringify(data));
-// 	});
-//
-//  };
-
-
-// function addUser() {
-// 	var data = {};
-// 	data.username = "123";
-// 	data.password = "123";
-// 	data.position = pos;
-// 	$.post('./users', data, function(data, status) {
-// 		alert("Data: " + JSON.stringify(data) + "\nStatus: " + status + ' position' + JSON.stringify(pos));
-// 	});
-//
-//  };
+        /* Alerts the results */
+        posting.done(function( data ) {
+          alert('success');
+        });
+});
 
  $(function() {
 

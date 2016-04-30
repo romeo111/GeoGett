@@ -41,7 +41,6 @@ app.get('/', function(req, res) {
 });
 
 
-
 app.listen(process.env.PORT, function() {
   console.log('GeoGett started on : ' + process.env.DOMAIN);
 });

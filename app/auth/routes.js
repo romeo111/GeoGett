@@ -15,6 +15,13 @@ const setupEmail = Q.async(function *(id, email) {
 
 module.exports = function(app, passport) {
 
+  app.post('/login',
+    passport.authenticate('local', { successRedirect: '/api/user/me',
+                                     failureRedirect: '/'})
+  );
+
+
+
   app.post('/api/user/me', function(req, res) {
     if (!req.body.email || !emailRe.test(req.body.email)) {
       return res.status(403).send('Invalid email').end();

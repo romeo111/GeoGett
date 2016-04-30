@@ -9,23 +9,27 @@ const Twitter  = require('./twitter');
 const Facebook = require('./facebook');
 const Vkontakte = require('./vkontakte');
 
+const User = require('../model/user');
+const Food = require('../model/food');
 const callBackPath = process.env.DOMAIN + 'api/auth/';
 
+passport.use(new LocalStrategy({
+   usernameField: 'phone'},
 
-passport.use(new LocalStrategy(
-  function(phone, password, done) {
-    User.findOne({ phone: phone }, function(err, user) {
+
+  function(username, password, done) {
+    User.findOne({ phone: username }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {
-        return done(null, false, { message: 'Incorrect phone.' });
+        return done(null, false, { message: 'Incorrect username.' });
       }
-      if (user.password != password) { return done(null, false, { message: 'Invalid password' });
+      if (user.password != password) {
+        return done(null, false, { message: 'Incorrect password.' });
       }
       return done(null, user);
     });
   }
 ));
-// my local
 
 
 passport.use(

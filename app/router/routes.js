@@ -5,6 +5,7 @@ const Food = require('../model/food');
 // authenticate
 module.exports = function(app) {
 
+
 	// food routes
 	app.get('/foods', function(req, res){
 		console.log('START answer for GET= ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));

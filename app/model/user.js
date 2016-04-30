@@ -12,6 +12,7 @@ const UserSchema = new Schema({
   email     : { type: String, unique: true },
   phone     : { type: String, required: true, unique: true },
   created   : { type: Date, default: Date.now },
+  password  : { type: String, required: true },
   foods: [FoodSchema],
   position: {type: [Number], index: '2d'},
 
