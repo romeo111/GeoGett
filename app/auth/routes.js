@@ -16,8 +16,12 @@ const setupEmail = Q.async(function *(id, email) {
 module.exports = function(app, passport) {
 
   app.post('/login',
-    passport.authenticate('local', { successRedirect: '/api/user/me',
-                                     failureRedirect: '/'})
+  passport.authenticate('local'),
+   function(req, res) {
+        console.log("Login for: " + req.user.username + " successful.");
+        res.send(JSON.stringify(req.user));                                 // I CAN ACCESS req.user here
+        }
+
   );
 
 
@@ -82,9 +86,10 @@ module.exports = function(app, passport) {
       res.redirect('/');
     });
 
-    app.get('/sign-out', function (req, res) {
+    app.get('/logout', function (req, res) {
        req.logout();
-       res.redirect('/');
+       console.log("logout");
+       
    });
 
 

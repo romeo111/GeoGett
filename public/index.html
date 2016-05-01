@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- added css animation script in body -->
 <html class="no-js" ng-app="GeogetAngularJS">
 <head>
     <meta charset="utf-8">
@@ -27,68 +26,44 @@
   <script src="js/plugins.js"></script>
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
-
 <body  ng-controller="MainController">
-    <div class="site-header"  >
-        <div class="container">
+<div class="site-header">
 
-            <form id="loginForm" action="/login" class="form-inline" method="post">
-                <div class="form-group">
-                    <label>Username:</label>
-                    <input type="text" name="phone" id="phone"/>
-                </div>
-                <div class="form-group">
-                    <label>Password:</label>
-                    <input type="text" name="password" id="password"/>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Log In"/>
-                </div>
-            </form>
+      <a id="btn-home" href="index.html" class="btn btn-success hidden" role="button">GeoGett</a>
+      <a id="btn-map" class="btn btn-default" role="button" onclick="showMap()">Карта с едой</a>
+      <a id="btn-add" class="btn btn-info hidden" role="button"  data-toggle="modal" data-target="#add-modal">Добавить свою еду</a>
 
-            <div class="row" >
-				          <div class="col-xs-3 col-md-4">  <a href="http://localhost:8080/">
-					               <span ><h1>Кругом еда</a><br> </h1>
+      <span id ="btn-gtfd" class="btn-group hidden" role="group" aria-label="Дистанция">
+       <button type="button" class="btn btn-default" onclick="getfood(1)">1km</button>
+       <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
+       <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
+     </span>
+      <button type="button" id="logoutBtn" class="btn btn-default inline hidden" onclick="logout()">Выйти</button>
 
-                  </div>
+      
+
+
+<!-- <a id="btn-login" class="btn btn-danger btn-block hidden" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a> -->
+</div>
 
 
 
 
-						<span class="col-xs-5 col-md-4 col-lg-2 col-md-offset-3">
-
-
-						<a id="btn-home" href="index.html" class="btn btn-success btn-block hidden" role="button">Главная страница</a>
-						<a id="btn-map" class="btn btn-default btn-block" role="button" onclick="showMap()">Карта с едой</a>
-              <div id ="btn-gtfd" class="btn-group hidden" role="group" aria-label="Дистанция">
-                <button type="button" class="btn btn-default" onclick="getfood(1)">1km</button>
-                <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
-                <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
-              </div>
-						<a id ="btn-gtfd"  class="btn btn-info btn-block hidden" role="button" onclick="getfood(5)">get food 5</a>
-            <a id="btn-add" class="btn btn-warning btn-block hidden" role="button"  data-toggle="modal" data-target="#add-modal">Добавить свою еду</a>
-						<a id="btn-login" class="btn btn-danger btn-block hidden" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a>
-
-						</span>
-
-            <div id="add_form" class="form-group">
-                  <span id="modal_close">>>Х<<</span>
-            <h4>Добавить свою еду на карту GeoGett</h4>
-            <form role="form">
-
-              <label for="foodname">Назовите ваш товар:</label>
-              <input type="text" name="foodname" id="foodname">
-
-
-                <label>Категория товара:</label>
-                <label class="radio-inline">
-                  <input type="radio" name="serving" id="serving">Готовое блюдо
-                </label>
-                <label class="radio-inline">
-                  <input type="radio" name="grocery" id="grocery">Продукты
-                </label>
-
-              <label>Доставка:</label>
+<div id="add_form" class="form-group">
+    <span id="modal_close">Х</span>
+    <h4>Добавить свою еду на карту GeoGett</h4>
+    <form role="form">
+        <p> Пользователь: <a id="userName"></a> </p>
+        <label for="foodname">Назовите ваш товар:</label>
+        <input type="text" name="foodname" id="foodname">
+        <label>Категория товара:</label>
+        <label class="radio-inline">
+          <input type="radio" name="serving" id="serving">Готовое блюдо
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="grocery" id="grocery">Продукты
+        </label>
+        <label>Доставка:</label>
               <label class="checkbox-inline">
                   <input type="checkbox"  name="selfdelivery"  checked disabled>Самовывоз</label>
               <label class="checkbox-inline">
@@ -104,15 +79,12 @@
               </textarea>
 
             <input id="foodSubmit" type="submit" value="ДОБАВИТЬ" >
+    </form>
+</div><!--  end add food form -->
 
+<div id="overlay"></div><!-- Пoдлoжкa -->
 
-
-            </form>
-            </div>
-
-            <div id="overlay"></div><!-- Пoдлoжкa -->
-
-            <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header" align="center">
@@ -199,9 +171,6 @@
                     </div>
                 </div>
 
-			</div><!-- end container -->
-      </div><!-- end row -->
-      </div> <!-- end header -->
 
 <div id="map" class="map"></div>
 <div id="bigSlider">
@@ -267,8 +236,7 @@
 	</div>
 </div>	<!-- /.bxslider -->
 
-
-    <div id="services" class="content-section">
+<div id="services" class="content-section">
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6">
@@ -326,13 +294,15 @@
             </div> <!-- /.row -->
 
         </div> <!-- /.container -->
-    </div> <!-- /.site-footer -->
+</div> <!-- /.site-footer -->
 
 
   <script src="js/MainController.js"></script>
 	<script src="js/bigSlider.js"></script>
 
 <script type="text/javascript">
+
+var UserObj ={};
 
 function dhtmlLoadScript(url)
 {
@@ -345,7 +315,6 @@ function dhtmlLoadScript(url)
 function showMap() {
 
   dhtmlLoadScript("js/initMap.js");
-
   $('.site-slider').hide();
 	$('#map').css("height", "100%");
 	$('html, body').animate({ scrollTop: $('#map').offset().top }, 300);
@@ -361,10 +330,9 @@ function showMap() {
 };
 
 document.getElementById("foodSubmit").addEventListener("click", function(){
-
   event.preventDefault();
   var newFood = {};
-
+    newFood.owner = $('#userName').val();
     newFood.foodname = $('#foodname').val();
     newFood.serving = $('#serving').is(':checked');
     newFood.grocery = $('#grocery').is(':checked');
@@ -373,33 +341,32 @@ document.getElementById("foodSubmit").addEventListener("click", function(){
     newFood.location[0] = parseFloat(pos.lng);
     newFood.location[1] = parseFloat(pos.lat);
     newFood.comment = $('#comment').val();
-
   var posting = $.post('./addfood', newFood );
-
   posting.done(function( data ) {
     alert('send data' + JSON.stringify(newFood));
-  });
+      });
 });
 
 
 $( "#loginForm" ).submit(function( event ) {
-  alert( "Handler for .submit() loginForm called." + $('#phone').val() +  $('#password').val() );
-
-  // Stop form from submitting normally
-  //event.preventDefault();
-  var loginData = {},
-  phone = $('#phone').val();
-  password = $('#password').val();
-
- console.log(phone, passport);
-        /* Send the data using post */
-        var posting = $.post('/login', {phone: phone, password: password});
-
-        /* Alerts the results */
-        posting.done(function( data ) {
-          alert('success');
-        });
+  var phone = $('#phone').val(),
+      password = $('#password').val();
+  var posting = $.post('/login', {phone: phone, password: password});
+  posting.done(function( user ) {
+          console.log('success ' + JSON.stringify(user));
+          UserObj = user;
+          document.getElementById("userName").innerHTML= JSON.stringify(UserObj.username);
+          $('#loginForm').hide();
+          $('#logoutBtn').removeClass('hidden');
+    });
 });
+
+function logout() {
+  $.get('/logout');
+  $('#loginForm').show();
+  $('#logoutBtn').hide();
+  UserObj = {};
+}
 
  $(function() {
 

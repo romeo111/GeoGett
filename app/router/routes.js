@@ -37,8 +37,8 @@ module.exports = function(app) {
 			newfood.grocery = req.body.grocery;
 			newfood.delivery = req.body.delivery;
 			newfood.comment = req.body.comment;
-
-    newfood.save(function(err){
+			newfood.owner = req.body.owner;
+    	newfood.save(function(err){
       if(err) {
 				console.log('cant save' );
 				throw err;
