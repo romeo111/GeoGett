@@ -37,18 +37,21 @@ app.use(function(req, res, next) {
 require('./app/router/routes.js')(app);
 require('./app/auth/routes')(app, passport);
 
+
 app.get('/', function(req, res) {
   res.send(JSON.stringify(req.session.passport)).end();
 });
 
-app.get("/*", function(req, res, next) {
+app.all("/*", function(req, res, next) {
 
   if(typeof req.cookies['connect.sid'] !== 'undefined') {
       console.log(req.cookies['connect.sid']);
   }
-
+  console.log('no reqcookiesconnect.sid');
   next(); // Call the next middleware
 });
+
+app.use(passport.authenticate('remember-me'));
 
 app.listen(process.env.PORT, function() {
   console.log('GeoGett started on : ' + process.env.DOMAIN);

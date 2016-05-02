@@ -15,7 +15,7 @@ const UserSchema = new Schema({
   password  : { type: String, required: true },
   foods: [FoodSchema],
   position: {type: [Number], index: '2d'},
-
+  token: String,
   twitter : {
     id    : String,
     token : String,
