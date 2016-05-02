@@ -12,7 +12,7 @@
     </script>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet">
 
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+	  <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/animate.css">
@@ -21,7 +21,8 @@
 
 	<script src="js/vendor/angular.min.js"></script>
   <script src="js/vendor/jquery-1.11.3.min.js"></script>
-	<script src="js/vendor/jquery-ui.js"></script>
+	<!-- <script src="js/vendor/jquery-ui.js"></script> -->
+  <script src="js/vendor/jquery.validate.min.js"></script>
   <script src="js/vendor/bootstrap.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
@@ -31,56 +32,91 @@
 
       <a id="btn-home" href="index.html" class="btn btn-success hidden" role="button">GeoGett</a>
       <a id="btn-map" class="btn btn-default" role="button" onclick="showMap()">Карта с едой</a>
-      <a id="btn-add" class="btn btn-info hidden" role="button"  data-toggle="modal" data-target="#add-modal">Добавить свою еду</a>
-
+      <a id="btn-add" class="btn btn-info hidden" role="button" >Добавить свою еду</a>
+      <button id="loginBtn" type="button" class="btn btn-info" data-toggle="modal" data-target="#loginDiv">Войти на сайт..</button>
+      <button id="logoutBtn" type="button"  class="btn btn-info hidden" onclick="logout()">Выйти</button>
       <span id ="btn-gtfd" class="btn-group hidden" role="group" aria-label="Дистанция">
        <button type="button" class="btn btn-default" onclick="getfood(1)">1km</button>
        <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
        <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
      </span>
-      <button type="button" id="logoutBtn" class="btn btn-default inline hidden" onclick="logout()">Выйти</button>
-
-      
 
 
-<!-- <a id="btn-login" class="btn btn-danger btn-block hidden" role="button"  data-toggle="modal" data-target="#login-modal">Логин..</a> -->
+
 </div>
 
+<!-- Modal -->
+<div id="loginDiv" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn close" data-dismiss="modal">Х</button>
+        <h4 class="modal-title">Войдите на сайт</h4>
+      </div>
+      <div class="modal-body">
+        <form  class="form-horizontal" role="form" id="loginForm" action="/login" class="form-inline inline" method="post">
+                    <label>Телефон:</label><input type="text" name="phone" id="phone" size="12"/> <br>
+                    <label>Пароль:</label><input type="text" name="password" id="password"/>
+                    <input type="submit" value="Log In"/>
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
 
+  </div>
+</div>
 
-<div id="add_form" class="form-group">
-    <span id="modal_close">Х</span>
-    <h4>Добавить свою еду на карту GeoGett</h4>
-    <form role="form">
-        <p> Пользователь: <a id="userName"></a> </p>
-        <label for="foodname">Назовите ваш товар:</label>
-        <input type="text" name="foodname" id="foodname">
-        <label>Категория товара:</label>
-        <label class="radio-inline">
-          <input type="radio" name="serving" id="serving">Готовое блюдо
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="grocery" id="grocery">Продукты
-        </label>
-        <label>Доставка:</label>
-              <label class="checkbox-inline">
-                  <input type="checkbox"  name="selfdelivery"  checked disabled>Самовывоз</label>
-              <label class="checkbox-inline">
-                <input type="checkbox" name="delivery" id="delivery">Доставка</label> <br>
+<!-- Modal -->
+<div id="addDiv" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
-              <label class="btn btn-primary" for="my-file-selector">
-                  <input id="my-file-selector" type="file" style="display:none;">
-                  Добавить фото товара..
-              </label><br>
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn close" data-dismiss="modal">Х</button>
+        <h4 class="modal-title">Добавьте свою еду</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form" id="add_form">
+            <p> Пользователь: <a id="userName"></a> </p>
+            <label for="foodname">Назовите ваш товар:</label>
+            <input type="text" name="foodname" id="foodname">
+            <label>Категория товара:</label>
+            <label class="radio-inline">
+              <input type="radio" name="serving" id="serving">Готовое блюдо
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="grocery" id="grocery">Продукты
+            </label> <br>
+            <label>Доставка:</label>
+                  <label class="checkbox-inline">
+                      <input type="checkbox"  name="selfdelivery"  checked disabled>Самовывоз</label>
+                  <label class="checkbox-inline">
+                    <input type="checkbox" name="delivery" id="delivery">Доставка</label> <br>
 
-              <label for="comment">Комментарий к товару:</label>
-              <textarea class="form-control" rows="3" name="comment" id="comment">
-              </textarea>
+                  <label class="btn btn-primary" for="my-file-selector">
+                      <input id="my-file-selector" type="file" style="display:none;">
+                      Добавить фото товара..
+                  </label><br>
 
-            <input id="foodSubmit" type="submit" value="ДОБАВИТЬ" >
-    </form>
+                  <label for="comment">Комментарий к товару:</label><textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+
+                <input id="foodSubmit" type="submit" value="ДОБАВИТЬ" >
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
 </div><!--  end add food form -->
+
+
 
 <div id="overlay"></div><!-- Пoдлoжкa -->
 
@@ -321,7 +357,7 @@ function showMap() {
 	$('#btn-map').hide();
 	$('#btn-services').hide();
 	$('#services').hide();
-	$('.site-footer').hide();
+	//$('.site-footer').hide();
 	$('#btn-home').removeClass("hidden");
   $('#btn-near').removeClass("hidden");
   $('#btn-add').removeClass("hidden");
@@ -329,7 +365,61 @@ function showMap() {
   $('#btn-gtfd').removeClass("hidden");
 };
 
-document.getElementById("foodSubmit").addEventListener("click", function(){
+$('#btn-add').click(function (e) {
+  e.preventDefault();
+  if (!UserObj.username) {
+
+    $('#loginDiv').modal();
+   }
+  else {
+    $('#addDiv').modal();
+  }
+});
+
+
+$(document).ready(function () {
+  var phoneMsg = "Укажите телефон в формате 380991112233";
+  var passwordMsg = "Укажите пароль длиной от 3 до 10 символов";
+    $('#loginForm').validate({
+
+        rules: {
+            phone: {
+                required: true,
+                minlength: 12,
+                maxlength: 12
+            },
+            password: {
+                required: true,
+                minlength: 3,
+                maxlength: 10
+            }
+        },
+        messages: {
+            phone: phoneMsg,
+            password: passwordMsg
+        }
+    });
+
+    $('#add_form').validate({
+        rules: {
+            foodname: {
+              required: true,
+              minlength: 3,
+              maxlength: 20
+            },
+            serving: {
+
+            },
+        },
+        messages: {
+
+        }
+    });
+
+
+});
+
+$( "#add_form" ).submit(function( event ) {
   event.preventDefault();
   var newFood = {};
     newFood.owner = $('#userName').val();
@@ -341,140 +431,38 @@ document.getElementById("foodSubmit").addEventListener("click", function(){
     newFood.location[0] = parseFloat(pos.lng);
     newFood.location[1] = parseFloat(pos.lat);
     newFood.comment = $('#comment').val();
+
   var posting = $.post('./addfood', newFood );
   posting.done(function( data ) {
     alert('send data' + JSON.stringify(newFood));
+    $('.modal').modal('hide');
       });
 });
 
 
 $( "#loginForm" ).submit(function( event ) {
+  event.preventDefault();
   var phone = $('#phone').val(),
       password = $('#password').val();
+      $('#loginForm').validate();
   var posting = $.post('/login', {phone: phone, password: password});
   posting.done(function( user ) {
-          console.log('success ' + JSON.stringify(user));
+          console.log('success login: ' + JSON.stringify(user));
           UserObj = user;
           document.getElementById("userName").innerHTML= JSON.stringify(UserObj.username);
-          $('#loginForm').hide();
+          $('#loginBtn').hide();
           $('#logoutBtn').removeClass('hidden');
+          $('.modal').modal('hide');
     });
 });
 
 function logout() {
   $.get('/logout');
-  $('#loginForm').show();
+  $('#loginDiv').show();
   $('#logoutBtn').hide();
   UserObj = {};
 }
 
- $(function() {
-
-     var $formLogin = $('#login-form');
-     var $formLost = $('#lost-form');
-     var $formRegister = $('#register-form');
-     var $divForms = $('#div-forms');
-     var $modalAnimateTime = 300;
-     var $msgAnimateTime = 150;
-     var $msgShowTime = 2000;
-     $("form").submit(function () {
-         switch(this.id) {
-             case "login-form":
-                 var $lg_username=$('#login_username').val();
-                 var $lg_password=$('#login_password').val();
-                 if ($lg_username == "ERROR") {
-                     msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "error", "glyphicon-remove", "Ошибка авторизации");
-                 } else {
-                     msgChange($('#div-login-msg'), $('#icon-login-msg'), $('#text-login-msg'), "success", "glyphicon-ok", "Вход на сайт произведен");
-                 }
-                 return false;
-                 break;
-             case "lost-form":
-                 var $ls_email=$('#lost_email').val();
-                 if ($ls_email == "ERROR") {
-                     msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "error", "glyphicon-remove", "Ошибка отправки");
-                 } else {
-                     msgChange($('#div-lost-msg'), $('#icon-lost-msg'), $('#text-lost-msg'), "success", "glyphicon-ok", "Письмо отправлено");
-                 }
-                 return false;
-                 break;
-             case "register-form":
-                 var $rg_username=$('#register_username').val();
-                 var $rg_email=$('#register_email').val();
-                 var $rg_password=$('#register_password').val();
-                 if ($rg_username == "ERROR") {
-                     msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "error", "glyphicon-remove", "Ошибка регистрации");
-                 } else {
-                     msgChange($('#div-register-msg'), $('#icon-register-msg'), $('#text-register-msg'), "success", "glyphicon-ok", "Регистрация завершена");
-                 }
-                 return false;
-                 break;
-             default:
-                 return false;
-         }
-         return false;
-     });
-
-     $('#login_register_btn').click( function () { modalAnimate($formLogin, $formRegister) });
-     $('#register_login_btn').click( function () { modalAnimate($formRegister, $formLogin); });
-     $('#login_lost_btn').click( function () { modalAnimate($formLogin, $formLost); });
-     $('#lost_login_btn').click( function () { modalAnimate($formLost, $formLogin); });
-     $('#lost_register_btn').click( function () { modalAnimate($formLost, $formRegister); });
-     $('#register_lost_btn').click( function () { modalAnimate($formRegister, $formLost); });
-
-     function modalAnimate ($oldForm, $newForm) {
-         var $oldH = $oldForm.height();
-         var $newH = $newForm.height();
-         $divForms.css("height",$oldH);
-         $oldForm.fadeToggle($modalAnimateTime, function(){
-             $divForms.animate({height: $newH}, $modalAnimateTime, function(){
-                 $newForm.fadeToggle($modalAnimateTime);
-             });
-         });
-     }
-
-     function msgFade ($msgId, $msgText) {
-         $msgId.fadeOut($msgAnimateTime, function() {
-             $(this).text($msgText).fadeIn($msgAnimateTime);
-         });
-     }
-
-     function msgChange($divTag, $iconTag, $textTag, $divClass, $iconClass, $msgText) {
-         var $msgOld = $divTag.text();
-         msgFade($textTag, $msgText);
-         $divTag.addClass($divClass);
-         $iconTag.removeClass("glyphicon-chevron-right");
-         $iconTag.addClass($iconClass + " " + $divClass);
-         setTimeout(function() {
-             msgFade($textTag, $msgOld);
-             $divTag.removeClass($divClass);
-             $iconTag.addClass("glyphicon-chevron-right");
-             $iconTag.removeClass($iconClass + " " + $divClass);
-           }, $msgShowTime);
-     }
- });
-
- $(document).ready(function() { // вся мaгия пoсле зaгрузки стрaницы
- 	$('#btn-add').click( function(event){ // лoвим клик пo ссылки с id="go"
- 		event.preventDefault(); // выключaем стaндaртную рoль элементa
- 		$('#overlay').fadeIn(400, // снaчaлa плaвнo пoкaзывaем темную пoдлoжку
- 		 	function(){ // пoсле выпoлнения предъидущей aнимaции
- 				$('#add_form')
- 					.css('display', 'block') // убирaем у мoдaльнoгo oкнa display: none;
- 					.animate({opacity: 1, top: '50%'}, 200); // плaвнo прибaвляем прoзрaчнoсть oднoвременнo сo съезжaнием вниз
- 		});
- 	});
- 	/* Зaкрытие мoдaльнoгo oкнa, тут делaем тo же сaмoе нo в oбрaтнoм пoрядке */
- 	$('#modal_close, #overlay').click( function(){ // лoвим клик пo крестику или пoдлoжке
- 		$('#add_form')
- 			.animate({opacity: 0, top: '45%'}, 200,  // плaвнo меняем прoзрaчнoсть нa 0 и oднoвременнo двигaем oкнo вверх
- 				function(){ // пoсле aнимaции
- 					$(this).css('display', 'none'); // делaем ему display: none;
- 					$('#overlay').fadeOut(400); // скрывaем пoдлoжку
- 				}
- 			);
- 	});
- });
 
 </script>
 

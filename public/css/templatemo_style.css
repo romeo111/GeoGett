@@ -309,10 +309,9 @@ h6 {
     Header Site Styling
    ========================================================================== */
 .site-header {
-  position: fixed;
-
+  position: absolute;
   min-height: 80px;
-  height: 100px;
+  height: 80px;
   width: 100%;
   z-index: 9999;
 
@@ -791,7 +790,7 @@ ul.social li a {
 
 
 
-
+/*
 
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 * {
@@ -856,6 +855,7 @@ ul.social li a {
     opacity: .8;
 }
 .modal-content {
+    margin-top: 25%;
     background-color: #ececec;
     border: 1px solid #bdc3c7;
     border-radius: 0px;
@@ -906,10 +906,10 @@ ul.social li a {
 .form-control {
   border-radius: 0px;
 }
+*/
 
 
-
-#add_form {
+#add_form #loginForm {
 	width: 400px;
 	height: 600px; /* Рaзмеры дoлжны быть фиксирoвaны */
 	border-radius: 5px;

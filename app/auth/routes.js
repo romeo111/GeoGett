@@ -15,6 +15,7 @@ const setupEmail = Q.async(function *(id, email) {
 
 module.exports = function(app, passport) {
 
+
   app.post('/login',
   passport.authenticate('local'),
    function(req, res) {
@@ -89,7 +90,7 @@ module.exports = function(app, passport) {
     app.get('/logout', function (req, res) {
        req.logout();
        console.log("logout");
-       
+
    });
 
 
