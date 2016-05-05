@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" ng-app="GeogetAngularJS">
+<html class="no-js" >
 <head>
     <meta charset="utf-8">
 
@@ -19,15 +19,14 @@
     <link rel="stylesheet" href="css/templatemo_misc.css">
     <link rel="stylesheet" href="css/templatemo_style.css">
 
-	<script src="js/vendor/angular.min.js"></script>
+
   <script src="js/vendor/jquery-1.11.3.min.js"></script>
-	<!-- <script src="js/vendor/jquery-ui.js"></script> -->
   <script src="js/vendor/jquery.validate.min.js"></script>
   <script src="js/vendor/bootstrap.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
-<body  ng-controller="MainController">
+<body>
 <div class="site-header">
 
       <a id="btn-home" href="index.html" class="btn btn-success hidden" role="button">GeoGett</a>
@@ -278,29 +277,29 @@
                 <div class="col-md-3 col-sm-6">
                     <div class="service-item">
                         <span class="service-icon first"></span>
-                        <h3>{{ title1}} </h3>
-                        <p>{{ about1}}  </p>
+                        <h3>Распределенная система обмена едой </h3>
+                        <p>Фото и короткое описание вашего блюда с помощью смартфона - и ваш собственный домашний ресторан открыт! Делитесь с окружающими вашими кулинарными шедеврами и зарабатывайте на продаже и доставке. Готовите вкусные суши или настоящую пиццу? Ваши соседи это оценят! :) </p>
                     </div> <!-- /.service-item -->
                 </div> <!-- /.col-md-3 -->
                 <div class="col-md-3 col-sm-6">
                     <div class="service-item">
                         <span class="service-icon second"></span>
-                        <h3>{{ title2}} </h3>
-                        <p>{{ about2}}  </p>
+                        <h3>На расстоянии вытянутой руки</h3>
+                        <p>Благодаря геолокации ищите то, что рядом. Мы ориентируем наши алгоритмы поиска на абсолютную близость и доступность. Сосед всегда ближе супермаркета! А домашняя еда вкуснее магазинной. Настройте параметры поиска от точки нахождения по своему выбору. Не больше 5 минут пешком? Не проблема!</p>
                     </div> <!-- /.service-item -->
                 </div> <!-- /.col-md-3 -->
                 <div class="col-md-3 col-sm-6">
                     <div class="service-item">
                         <span class="service-icon third"></span>
-                       <h3>{{ title3}} </h3>
-                        <p>{{ about3}}  </p>
+                       <h3>Широкие возможности для всех</h3>
+                        <p>Портится богатый урожай яблок с дачи? Надоели стеллажи консерваций от тещи? Вы профессиональный кондитер и хотите расширить свой сбыт? Муж приносит каждые выходные много свежей рыбы, которую вашей семье не съесть? Getfood поможет всем! Продавайте в два клика, с доставкой или без. Выбирайте место и время, когда удобно лично Вам. </p>
                     </div> <!-- /.service-item -->
                 </div> <!-- /.col-md-3 -->
                 <div class="col-md-3 col-sm-6">
                     <div class="service-item">
                         <span class="service-icon fourth"></span>
-                        <h3>{{ title4}} </h3>
-                        <p>{{ about4}}  </p>
+                        <h3>Откройте магазин без вложений</h3>
+                        <p>Вы занимаетесь детьми и домашним хозяйством и не против подзаработать? Скучаете в офисе? Возможно, благодарные клиенты засыпают вас спиртным и конфетами, а вам столько не осилить? Откройте собственный домашний магазин без вложений! </p>
                     </div> <!-- /.service-item -->
                 </div> <!-- /.col-md-3 -->
             </div> <!-- /.row -->
@@ -332,10 +331,7 @@
         </div> <!-- /.container -->
 </div> <!-- /.site-footer -->
 
-
-  <script src="js/MainController.js"></script>
-	<script src="js/bigSlider.js"></script>
-
+<script src="js/bigSlider.js"></script>
 <script type="text/javascript">
 
 var UserObj ={};
@@ -389,7 +385,7 @@ $(document).ready(function () {
           $('.modal').modal('hide');
     });
   getUser.fail(function() {
-    console.log( "no valid cookies for autologin" );
+    console.log( "no valid cookies send for autologin" );
   })
 
 
@@ -474,7 +470,7 @@ $( "#loginForm" ).submit(function( event ) {
 
 function logout() {
   $.get('/logout');
-  $('#loginDiv').show();
+  $('#loginDiv').removeClass("hidden");
   $('#logoutBtn').hide();
   UserObj = {};
 }

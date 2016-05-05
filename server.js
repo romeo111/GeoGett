@@ -20,13 +20,13 @@ app.use(session({ secret: 'p2pgeo',
    },
   store: new MongoStore({mongooseConnection: db.connection})
  }));
-
+app.use(express.static(__dirname + '/public'));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(__dirname + '/public'));
+
 app.use(cookieParser());
 app.set('view engine', 'jade');
 app.use(function(req, res, next) {

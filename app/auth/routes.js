@@ -28,7 +28,6 @@ function saveRememberMeToken(token, uid, fn) {
 
 function issueToken(user, done) {
   var token = utils.randomString(64);
-  console.log(user.id + " user id");
   saveRememberMeToken(token, user.id, function(err) {
     if (err) { return done(err); }
     return done(null, token);
@@ -40,9 +39,7 @@ module.exports = function(app, passport) {
 
   app.get('/login', function(req, res, next){
     if (!req.user) {
-      console.log('no user for gett');
       return next();
-      res.send('no req user');
     }
     console.log(" AutoLogin for GET req: " + req.user.username + " successful.");
     res.send(JSON.stringify(req.user));

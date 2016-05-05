@@ -30,7 +30,6 @@ function saveRememberMeToken(token, uid, fn) {
 
 function issueToken(user, done) {
   var token = utils.randomString(64);
-  console.log(user.id + " user id");
   saveRememberMeToken(token, user.id, function(err) {
     if (err) { return done(err); }
     return done(null, token);
