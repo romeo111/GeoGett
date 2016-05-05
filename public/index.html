@@ -80,7 +80,7 @@
         <h4 class="modal-title">Добавьте свою еду</h4>
       </div>
       <div class="modal-body">
-        <form role="form" id="add_form">
+        <form role="form" id="add_form" enctype="multipart/form-data" method="post">
             <p> Пользователь: <a id="userName"></a> </p>
             <label for="foodname">Назовите ваш товар:</label>
             <input type="text" name="foodname" id="foodname">
@@ -97,10 +97,10 @@
                   <label class="checkbox-inline">
                     <input type="checkbox" name="delivery" id="delivery">Доставка</label> <br>
 
-                  <label class="btn btn-primary" for="my-file-selector">
-                      <input id="my-file-selector" type="file" style="display:none;">
-                      Добавить фото товара..
-                  </label><br>
+
+                    <!-- <form id='fileUpload' method='post' action='upload' enctype="multipart/form-data">
+                    <input id='fileSelector' type='file' name='fileUploaded'>
+                    </form> -->
 
                   <label for="comment">Комментарий к товару:</label><textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
 
@@ -271,6 +271,11 @@
 	</div>
 </div>	<!-- /.bxslider -->
 
+<form id="coolForm" method='post' action='upload' enctype="multipart/form-data">
+<input id="coolFile" type='file' name='fileUploaded'>
+</form>
+
+
 <div id="services" class="content-section">
         <div class="container">
             <div class="row">
@@ -306,6 +311,7 @@
 
         </div> <!-- /.container -->
     </div> <!-- /#services -->
+
 <div class="site-footer">
         <div class="container">
             <div class="row">
@@ -334,8 +340,8 @@
 <script src="js/bigSlider.js"></script>
 <script type="text/javascript">
 
-var UserObj ={};
 
+var UserObj ={};
 function dhtmlLoadScript(url)
 {
    var e = document.createElement("script");
@@ -372,8 +378,17 @@ $('#btn-add').click(function (e) {
   }
 });
 
+document.getElementById("coolFile").onchange = function() {
+    document.getElementById("coolForm").submit();
+};
+
+// $('#fileSelector').change(function() {
+//   $('#fileUpload').submit();
+// });
 
 $(document).ready(function () {
+
+
 
   var getUser = $.get('/login');
   getUser.done(function( user ) {
@@ -382,7 +397,7 @@ $(document).ready(function () {
           document.getElementById("userName").innerHTML= JSON.stringify(UserObj.username);
           $('#loginBtn').hide();
           $('#logoutBtn').removeClass('hidden');
-          $('.modal').modal('hide');
+          //$('.modal').modal('hide');
     });
   getUser.fail(function() {
     console.log( "no valid cookies send for autologin" );
@@ -445,7 +460,7 @@ $( "#add_form" ).submit(function( event ) {
 
   var posting = $.post('./addfood', newFood );
   posting.done(function( data ) {
-    alert('send data' + JSON.stringify(newFood));
+    console.log('newFood added' + JSON.stringify(newFood));
     $('.modal').modal('hide');
       });
 });

@@ -10,7 +10,9 @@ var flash = require('connect-flash');
 require('dotenv').load({silent: false});
 var passport = require('./app/auth/index');
 const db = require('./app/service/database');
+var busboy = require('connect-busboy');
 
+app.use(express.static(__dirname + '/public'));
 app.use(session({ secret: 'p2pgeo',
   saveUninitialized: true,
   resave : true,
@@ -20,15 +22,13 @@ app.use(session({ secret: 'p2pgeo',
    },
   store: new MongoStore({mongooseConnection: db.connection})
  }));
-app.use(express.static(__dirname + '/public'));
 app.use(flash());
+app.use(busboy());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(cookieParser());
-app.set('view engine', 'jade');
 app.use(function(req, res, next) {
   res.setHeader('Content-type', 'application/json');
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -36,15 +36,10 @@ app.use(function(req, res, next) {
 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, X-HTTP-Method-Override');
 	next();
 });
-
 require('./app/router/routes.js')(app);
 require('./app/auth/routes')(app, passport);
 app.use(passport.authenticate('remember-me'));
 
-
-
-
-
 app.listen(process.env.PORT, function() {
-  console.log('GeoGett started on : ' + process.env.DOMAIN);
+  console.log('GeoGett 0.0.1 started on : ' + process.env.DOMAIN);
 });
