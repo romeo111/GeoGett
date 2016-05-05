@@ -2,13 +2,14 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var http = require('http').Server(app);
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 require('dotenv').load({silent: false});
 var passport = require('./app/auth/index');
-
+const db = require('./app/service/database');
 
 app.use(session({ secret: 'p2pgeo',
   saveUninitialized: true,
@@ -16,8 +17,10 @@ app.use(session({ secret: 'p2pgeo',
   cookie: {
      secure: false,
      maxAge: 22909943600
-   }
+   },
+  store: new MongoStore({mongooseConnection: db.connection})
  }));
+
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

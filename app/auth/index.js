@@ -25,36 +25,17 @@ function consumeRememberMeToken(token, fn) {
 
 function saveRememberMeToken(token, uid, fn) {
   tokens[token] = uid;
-  console.log('saved token');
   return fn();
 }
 
 function issueToken(user, done) {
   var token = utils.randomString(64);
+  console.log(user.id + " user id");
   saveRememberMeToken(token, user.id, function(err) {
     if (err) { return done(err); }
     return done(null, token);
   });
 }
-
-
-// passport.use(new RememberMeStrategy(
-//   function(token, done) {
-//     Token.consume(token, function (err, user) {
-//       if (err) { return done(err); }
-//       if (!user) { return done(null, false); }
-//       return done(null, user);
-//     });
-//   },
-//   function(user, done) {
-//     var token = utils.generateToken(64);
-//     Token.save(token, { userId: user.id }, function(err) {
-//       if (err) { return done(err); }
-//       console.log('token saved for: ' + userId);
-//       return done(null, token);
-//     });
-//   }
-// ));
 
 
 passport.use(new LocalStrategy({
@@ -82,30 +63,17 @@ passport.use(new RememberMeStrategy(
     consumeRememberMeToken(token, function(err, uid) {
       if (err) { return done(err); }
       if (!uid) {
-        console.log('no UID consumeRememberMeToken');
         return done(null, false); }
 
       findById(uid, function(err, user) {
         if (err) { return done(err); }
-        if (!user) {
-          console.log('no user');
-          return done(null, false); }
+        if (!user) {  return done(null, false); }
         return done(null, user);
       });
     });
   },
   issueToken
 ));
-
-function issueToken(user, done) {
-  var token = utils.randomString(64);
-  saveRememberMeToken(token, user.id, function(err) {
-    if (err) { return done(err); }
-    return done(null, token);
-  });
-}
-
-
 
 passport.use(
   new FacebookStrategy({
@@ -166,8 +134,9 @@ passport.deserializeUser(function(id, done) {
   console.log('start deserializeUser '+ id);
   User.findById(id, function (err, user) {
     if(err) { console.log('eer in userfind by id'); throw err}
-    console.log('done deserializeUser');
+    console.log(user.username);
     done(err, user);
+
   });
 });
 

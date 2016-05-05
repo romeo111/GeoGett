@@ -13,21 +13,40 @@ const setupEmail = Q.async(function *(id, email) {
   return user;
 });
 
+var tokens = {}
+
+function consumeRememberMeToken(token, fn) {
+  var uid = tokens[token];
+  delete tokens[token];
+  return fn(null, uid);
+}
+
+function saveRememberMeToken(token, uid, fn) {
+  tokens[token] = uid;
+  return fn();
+}
+
+function issueToken(user, done) {
+  var token = utils.randomString(64);
+  console.log(user.id + " user id");
+  saveRememberMeToken(token, user.id, function(err) {
+    if (err) { return done(err); }
+    return done(null, token);
+  });
+}
+
 
 module.exports = function(app, passport) {
 
-  app.get('/', function(req, res) {
-    res.send(JSON.stringify(req.session.passport)).end();
-  });
-
-  app.all("/*", function(req, res, next) {
-
-    if(typeof req.cookies['connect.sid'] !== 'undefined') {
-        console.log(req.cookies['connect.sid']);
+  app.get('/login', function(req, res, next){
+    if (!req.user) {
+      console.log('no user for gett');
+      return next();
+      res.send('no req user');
     }
-     else {console.log('no req.cookie sconnect.sid')};
-    next(); // Call the next middleware
-  });
+    console.log(" AutoLogin for GET req: " + req.user.username + " successful.");
+    res.send(JSON.stringify(req.user));
+});
 
   app.post('/login',
   passport.authenticate('local', {
@@ -38,14 +57,13 @@ module.exports = function(app, passport) {
         if (!req.body.remember_me) { return next(); }
         issueToken(req.user, function(err, token) {
           if (err) { return next(err); }
-          console.log('im here issueToken');
           res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 });
           return next();
     });
       },
        function(req, res) {
         console.log("Login for: " + req.user.username + " successful.");
-        res.send(JSON.stringify(req.user));                                 // I CAN ACCESS req.user here
+        res.send(JSON.stringify(req.user));
         }
 
   );
@@ -113,9 +131,9 @@ module.exports = function(app, passport) {
     });
 
     app.get('/logout', function (req, res) {
-      //  res.clearCookie('remember_me');
+       res.clearCookie('remember_me');
        req.logout();
-              console.log("logout");
+      console.log("logout");
 
    });
 
