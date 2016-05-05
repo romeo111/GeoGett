@@ -5,6 +5,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const VKontakteStrategy = require('passport-vkontakte').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
+const RememberMeStrategy = require('passport-remember-me').Strategy;
 const Twitter  = require('./twitter');
 const Facebook = require('./facebook');
 const Vkontakte = require('./vkontakte');
@@ -13,11 +14,55 @@ const User = require('../model/user');
 const Food = require('../model/food');
 const callBackPath = process.env.DOMAIN + 'api/auth/';
 
+var tokens = {}
+
+function consumeRememberMeToken(token, fn) {
+  var uid = tokens[token];
+  // invalidate the single-use token
+  delete tokens[token];
+  return fn(null, uid);
+}
+
+function saveRememberMeToken(token, uid, fn) {
+  tokens[token] = uid;
+  console.log('saved token');
+  return fn();
+}
+
+function issueToken(user, done) {
+  var token = utils.randomString(64);
+  saveRememberMeToken(token, user.id, function(err) {
+    if (err) { return done(err); }
+    return done(null, token);
+  });
+}
+
+
+// passport.use(new RememberMeStrategy(
+//   function(token, done) {
+//     Token.consume(token, function (err, user) {
+//       if (err) { return done(err); }
+//       if (!user) { return done(null, false); }
+//       return done(null, user);
+//     });
+//   },
+//   function(user, done) {
+//     var token = utils.generateToken(64);
+//     Token.save(token, { userId: user.id }, function(err) {
+//       if (err) { return done(err); }
+//       console.log('token saved for: ' + userId);
+//       return done(null, token);
+//     });
+//   }
+// ));
+
+
 passport.use(new LocalStrategy({
    usernameField: 'phone'},
 
 
   function(username, password, done) {
+      process.nextTick(function () {
     User.findOne({ phone: username }, function(err, user) {
       if (err) { return done(err); }
       if (!user) {
@@ -28,8 +73,38 @@ passport.use(new LocalStrategy({
       }
       return done(null, user);
     });
-  }
+  });
+}
 ));
+
+passport.use(new RememberMeStrategy(
+  function(token, done) {
+    consumeRememberMeToken(token, function(err, uid) {
+      if (err) { return done(err); }
+      if (!uid) {
+        console.log('no UID consumeRememberMeToken');
+        return done(null, false); }
+
+      findById(uid, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) {
+          console.log('no user');
+          return done(null, false); }
+        return done(null, user);
+      });
+    });
+  },
+  issueToken
+));
+
+function issueToken(user, done) {
+  var token = utils.randomString(64);
+  saveRememberMeToken(token, user.id, function(err) {
+    if (err) { return done(err); }
+    return done(null, token);
+  });
+}
+
 
 
 passport.use(
@@ -83,11 +158,17 @@ passport.use(
 
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  console.log('start serializeUser user id' + user.id);
+  done(null, user.id);
 });
 
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(id, done) {
+  console.log('start deserializeUser '+ id);
+  User.findById(id, function (err, user) {
+    if(err) { console.log('eer in userfind by id'); throw err}
+    console.log('done deserializeUser');
+    done(err, user);
+  });
 });
 
 

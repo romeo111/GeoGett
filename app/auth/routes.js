@@ -2,7 +2,7 @@
 
 const User = require('../model/user');
 const Q    = require('q');
-
+const utils = require('./utils');
 const emailRe =/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 const setupEmail = Q.async(function *(id, email) {
   let user = yield User.findById(id);
@@ -13,12 +13,37 @@ const setupEmail = Q.async(function *(id, email) {
   return user;
 });
 
+
 module.exports = function(app, passport) {
 
+  app.get('/', function(req, res) {
+    res.send(JSON.stringify(req.session.passport)).end();
+  });
+
+  app.all("/*", function(req, res, next) {
+
+    if(typeof req.cookies['connect.sid'] !== 'undefined') {
+        console.log(req.cookies['connect.sid']);
+    }
+     else {console.log('no req.cookie sconnect.sid')};
+    next(); // Call the next middleware
+  });
 
   app.post('/login',
-  passport.authenticate('local'),
-   function(req, res) {
+  passport.authenticate('local', {
+    failureRedirect: '/login',
+    failureFlash: true
+  }),
+     function(req, res, next) {
+        if (!req.body.remember_me) { return next(); }
+        issueToken(req.user, function(err, token) {
+          if (err) { return next(err); }
+          console.log('im here issueToken');
+          res.cookie('remember_me', token, { path: '/', httpOnly: true, maxAge: 604800000 });
+          return next();
+    });
+      },
+       function(req, res) {
         console.log("Login for: " + req.user.username + " successful.");
         res.send(JSON.stringify(req.user));                                 // I CAN ACCESS req.user here
         }
@@ -88,10 +113,14 @@ module.exports = function(app, passport) {
     });
 
     app.get('/logout', function (req, res) {
+      //  res.clearCookie('remember_me');
        req.logout();
-       console.log("logout");
+              console.log("logout");
 
    });
 
-
+   function ensureAuthenticated(req, res, next) {
+     if (req.isAuthenticated()) { return next(); }
+     res.redirect('/login')
+   }
 } // end exports

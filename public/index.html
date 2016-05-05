@@ -443,9 +443,10 @@ $( "#add_form" ).submit(function( event ) {
 $( "#loginForm" ).submit(function( event ) {
   event.preventDefault();
   var phone = $('#phone').val(),
-      password = $('#password').val();
+      password = $('#password').val(),
+      remember_me =  true;
       $('#loginForm').validate();
-  var posting = $.post('/login', {phone: phone, password: password});
+  var posting = $.post('/login', {phone: phone, password: password, remember_me: remember_me });
   posting.done(function( user ) {
           console.log('success login: ' + JSON.stringify(user));
           UserObj = user;
