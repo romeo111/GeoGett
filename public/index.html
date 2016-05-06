@@ -2,7 +2,6 @@
 <html class="no-js" >
 <head>
     <meta charset="utf-8">
-
     <title>Getfood - первая геосеть для обмена едой</title>
     <meta name="description" content="">
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/png">
@@ -11,15 +10,12 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcCdpE8vYmUCuicjjvXf1F_F1MPb0TTLQ">
     </script>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet">
-
 	  <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/templatemo_misc.css">
     <link rel="stylesheet" href="css/templatemo_style.css">
-
-
   <script src="js/vendor/jquery-1.11.3.min.js"></script>
   <script src="js/vendor/jquery.validate.min.js"></script>
   <script src="js/vendor/bootstrap.js"></script>
@@ -39,16 +35,9 @@
        <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
        <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
      </span>
-
-
-
 </div>
-
-<!-- Modal -->
 <div id="loginDiv" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="btn close" data-dismiss="modal">Х</button>
@@ -65,14 +54,11 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-
   </div>
 </div>
-
 <!-- Modal -->
 <div id="addDiv" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -80,6 +66,9 @@
         <h4 class="modal-title">Добавьте свою еду</h4>
       </div>
       <div class="modal-body">
+        <form id="coolForm" method='post' action='upload' enctype="multipart/form-data">
+        <input id="coolFile" type='file' name='fileUploaded'>
+        </form>
         <form role="form" id="add_form" enctype="multipart/form-data" method="post">
             <p> Пользователь: <a id="userName"></a> </p>
             <label for="foodname">Назовите ваш товар:</label>
@@ -97,116 +86,18 @@
                   <label class="checkbox-inline">
                     <input type="checkbox" name="delivery" id="delivery">Доставка</label> <br>
 
-
-                    <!-- <form id='fileUpload' method='post' action='upload' enctype="multipart/form-data">
-                    <input id='fileSelector' type='file' name='fileUploaded'>
-                    </form> -->
-
                   <label for="comment">Комментарий к товару:</label><textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
 
                 <input id="foodSubmit" type="submit" value="ДОБАВИТЬ" >
-        </form>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
-
   </div>
 </div><!--  end add food form -->
-
-
-
-<div id="overlay"></div><!-- Пoдлoжкa -->
-
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header" align="center">
-
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть">
-                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                </button>
-                            </div>
-
-
-                            <div id="div-forms">
-
-
-                                <form id="login-form">
-                                    <div class="modal-body">
-                                        <div id="div-login-msg">
-                                            <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                            <span id="text-login-msg">Введите логин и пароль</span>
-                                        </div>
-                                        <input id="login_username" class="form-control" type="text" placeholder="Логин (введите ERROR чтобы увидеть эффект ошибки)" required>
-                                        <input id="login_password" class="form-control" type="password" placeholder="Пароль" required>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Войти</button>
-                                        </div>
-                                        <div>
-                                            <button id="login_lost_btn" type="button" class="btn btn-link">Забыли пароль?</button>
-                                            <button id="login_register_btn" type="button" class="btn btn-link">Зарегистрироваться</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-
-
-                                <form id="lost-form" style="display:none;">
-                                    <div class="modal-body">
-                                        <div id="div-lost-msg">
-                                            <div id="icon-lost-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                            <span id="text-lost-msg">Введите ваш e-mail.</span>
-                                        </div>
-                                        <input id="lost_email" class="form-control" type="text" placeholder="E-Mail (введите ERROR чтобы увидеть эффект ошибки)" required>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Отправить</button>
-                                        </div>
-                                        <div>
-                                            <button id="lost_login_btn" type="button" class="btn btn-link">Войти</button>
-                                            <button id="lost_register_btn" type="button" class="btn btn-link">Зарегистрироваться</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-
-
-                                <form id="register-form" style="display:none;">
-                                    <div class="modal-body">
-                                        <div id="div-register-msg">
-                                            <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                            <span id="text-register-msg">Регистрация аккаунта</span>
-                                        </div>
-                                        <input id="register_username" class="form-control" type="text" placeholder="Логин (введите ERROR чтобы увидеть эффект ошибки)" required>
-                                        <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
-                                        <input id="register_password" class="form-control" type="password" placeholder="Пароль" required>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <div>
-                                            <button type="submit" class="btn btn-primary btn-lg btn-block">Зарегистрироваться</button>
-                                        </div>
-                                        <div>
-                                            <button id="register_login_btn" type="button" class="btn btn-link">Войти</button>
-                                            <button id="register_lost_btn" type="button" class="btn btn-link">Забыли пароль?</button>
-                                        </div>
-                                    </div>
-                                </form>
-
-
-                            </div>
-
-
-                        </div>
-                    </div>
-                </div>
-
-
+<div id="overlay"></div>
 <div id="map" class="map"></div>
 <div id="bigSlider">
     <div class="site-slider">
@@ -271,9 +162,6 @@
 	</div>
 </div>	<!-- /.bxslider -->
 
-<form id="coolForm" method='post' action='upload' enctype="multipart/form-data">
-<input id="coolFile" type='file' name='fileUploaded'>
-</form>
 
 
 <div id="services" class="content-section">
@@ -308,7 +196,6 @@
                     </div> <!-- /.service-item -->
                 </div> <!-- /.col-md-3 -->
             </div> <!-- /.row -->
-
         </div> <!-- /.container -->
     </div> <!-- /#services -->
 
@@ -320,7 +207,6 @@
                     	Copyright &copy; 2015 <a href="#">Getfood LTD</a>
                         | Design: <a rel="nofollow" href="#" target="_parent">noDezigN</a>
                     </span>
-
             </div> <!-- /.col-md-6 -->
                 <div class="col-md-4 col-sm-6">
                     <ul class="social">
@@ -330,17 +216,19 @@
                         <li><a href="#" class="fa fa-linkedin"></a></li>
                         <li><a href="#" class="fa fa-rss"></a></li>
                     </ul>
-
                 </div> <!-- /.col-md-6 -->
             </div> <!-- /.row -->
-
         </div> <!-- /.container -->
 </div> <!-- /.site-footer -->
 
 <script src="js/bigSlider.js"></script>
 <script type="text/javascript">
-
-
+document.getElementById("coolFile").onchange = function() {
+    document.getElementById("coolForm").submit(function(e) {
+      e.preventDefault();
+      return false;
+    });
+};
 var UserObj ={};
 function dhtmlLoadScript(url)
 {
@@ -351,7 +239,6 @@ function dhtmlLoadScript(url)
 };
 
 function showMap() {
-
   dhtmlLoadScript("js/initMap.js");
   $('.site-slider').hide();
 	$('#map').css("height", "100%");
@@ -359,7 +246,6 @@ function showMap() {
 	$('#btn-map').hide();
 	$('#btn-services').hide();
 	$('#services').hide();
-	//$('.site-footer').hide();
 	$('#btn-home').removeClass("hidden");
   $('#btn-near').removeClass("hidden");
   $('#btn-add').removeClass("hidden");
@@ -370,26 +256,13 @@ function showMap() {
 $('#btn-add').click(function (e) {
   e.preventDefault();
   if (!UserObj.username) {
-
-    $('#loginDiv').modal();
-   }
-  else {
-    $('#addDiv').modal();
-  }
+    $('#loginDiv').modal() }
+  else { $('#addDiv').modal() }
 });
 
-document.getElementById("coolFile").onchange = function() {
-    document.getElementById("coolForm").submit();
-};
 
-// $('#fileSelector').change(function() {
-//   $('#fileUpload').submit();
-// });
 
 $(document).ready(function () {
-
-
-
   var getUser = $.get('/login');
   getUser.done(function( user ) {
           console.log('success login: ' + JSON.stringify(user));
@@ -397,12 +270,10 @@ $(document).ready(function () {
           document.getElementById("userName").innerHTML= JSON.stringify(UserObj.username);
           $('#loginBtn').hide();
           $('#logoutBtn').removeClass('hidden');
-          //$('.modal').modal('hide');
-    });
+          });
   getUser.fail(function() {
     console.log( "no valid cookies send for autologin" );
   })
-
 
   var phoneMsg = "Укажите телефон в формате 380991112233";
   var passwordMsg = "Укажите пароль длиной от 3 до 10 символов";
@@ -425,7 +296,6 @@ $(document).ready(function () {
             password: passwordMsg
         }
     });
-
     $('#add_form').validate({
         rules: {
             foodname: {
@@ -433,16 +303,10 @@ $(document).ready(function () {
               minlength: 3,
               maxlength: 20
             },
-            serving: {
-
-            },
+            serving: { },
         },
-        messages: {
-
-        }
+        messages: { }
     });
-
-
 });
 
 $( "#add_form" ).submit(function( event ) {
@@ -464,7 +328,6 @@ $( "#add_form" ).submit(function( event ) {
     $('.modal').modal('hide');
       });
 });
-
 
 $( "#loginForm" ).submit(function( event ) {
   event.preventDefault();
@@ -489,11 +352,6 @@ function logout() {
   $('#logoutBtn').hide();
   UserObj = {};
 }
-
-
 </script>
-
-
-
 </body>
 </html>

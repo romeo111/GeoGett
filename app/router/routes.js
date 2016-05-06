@@ -14,11 +14,11 @@ module.exports = function(app) {
             console.log("Uploading: " + filename);
 
             //Path where image will be uploaded
-            fstream = fs.createWriteStream('./img/' + filename);
+            fstream = fs.createWriteStream('./img/' + filename + '32323432');
             file.pipe(fstream);
             fstream.on('close', function () {
                 console.log("Upload Finished of " + filename);
-                res.redirect('back');           //where to go next
+                        //where to go next
             });
         });
     });
