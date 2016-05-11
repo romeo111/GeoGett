@@ -100,7 +100,9 @@ function geocodeLatLng(geocoder, map, infowindow) {
 }
 
 function getfood(maxdist) {
-  var infoWindow = new google.maps.InfoWindow();
+  var infoWindow = new google.maps.InfoWindow({
+
+  });
   var geocoder = new google.maps.Geocoder;
 
   var sendData = {};
@@ -116,7 +118,9 @@ function getfood(maxdist) {
          foodName = data[i].name.toString();
          ownerPhone =  JSON.stringify(data[i].owner[0].phone);
          ownerName = JSON.stringify(data[i].owner[0].username);
-         foodAddress = Address;
+         ownerName = ownerName.replace(/^"(.*)"$/, '$1');
+         ownerPhone = ownerPhone.replace(/^"(.*)"$/, '$1');
+
          food = new google.maps.Marker({
               position: foodLatlng,
               title: foodName,
@@ -124,13 +128,13 @@ function getfood(maxdist) {
           });
 
 
-        var popupContent = '<div id="foodContent" style="width: 400px">' +
-                            '<div><h2>' + foodName + '</h2></div>' +
-                            '<div>' + ' Продавец: '+ ownerName + 'Телефон: '+ ownerPhone +'</div>' +
-                            '<div id="foodAddress">' + 'Расположение: ' + foodAddress + '</div>' +
-                            '<div><img width="380" src="' + data[i].photoURL.toString() + '" /></div>' +
-                            '<div>' + data[i].comment.toString()  + '</div>' +
-                            
+        var popupContent = '<div id="iw-container">' +
+                            '<div class="iw-title">' + foodName + '</div>' +
+                            '<div>' + ' Продавец: '+ ownerName + '<br>' + 'Телефон: '+ ownerPhone +'</div>' +
+                            '<div id="foodAddress">' + '</div>' +
+                            '<div><img width="400" src="' + data[i].photoURL.toString() + '" /></div>' +
+                            '<div>' + 'Комментарий продавца: ' + data[i].comment.toString()  + '</div>' +
+
                         '</div>';
 
       createInfoWindow(food, popupContent);
@@ -149,7 +153,8 @@ function createInfoWindow(marker, popupContent) {
   });
 }
 google.maps.event.addListener(infoWindow, 'domready', function() {
-  document.getElementById('foodAddress').innerHTML = Address;
+  document.getElementById('foodAddress').innerHTML = 'Расположение: ' + Address;
+
 });
 };
 initMap();

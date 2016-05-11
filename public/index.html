@@ -267,7 +267,9 @@ $(document).ready(function () {
   getUser.done(function( user ) {
           console.log('success login: ' + JSON.stringify(user));
           UserObj = user;
-          document.getElementById("userName").innerHTML= JSON.stringify(UserObj.username);
+          username =  JSON.stringify(UserObj.username);
+          username = username.replace(/^"(.*)"$/, '$1');
+          document.getElementById("userName").innerHTML = username;
           $('#loginBtn').hide();
           $('#logoutBtn').removeClass('hidden');
           });
