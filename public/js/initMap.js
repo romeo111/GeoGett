@@ -1,7 +1,7 @@
 var map, pos, currentPositionMarker, foodName, food, foodLatlng;
 var markersArray = [];
 var foodInfowindowArray = [];
-
+var Address;
 
 function clearOverlays() {
   for (var i = 0; i < markersArray.length; i++ ) {
@@ -54,7 +54,6 @@ function initMap() {
         lng: position.coords.longitude,
 				lat: position.coords.latitude
       };
-
 var	currentPositionMarker = new google.maps.Marker({
     position: pos,
     title:"Уточните свое местоположение перетягиванием маркера",
@@ -64,16 +63,13 @@ var	currentPositionMarker = new google.maps.Marker({
         scaledSize: new google.maps.Size(40, 40) // pixels
       }
 });
-
 google.maps.event.addListener(currentPositionMarker, 'dragend', function() {
   pos.lat = currentPositionMarker.getPosition().lat();
   pos.lng = currentPositionMarker.getPosition().lng();
   map.setCenter(pos);
    });
-
 currentPositionMarker.setMap(map);
-
-      map.setCenter(pos);
+map.setCenter(pos);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
@@ -89,9 +85,25 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 }
 };
 
-function getfood(maxdist) {
+function geocodeLatLng(geocoder, map, infowindow) {
 
-    var sendData = {};
+    geocoder.geocode({'location': foodLatlng}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[0]) {
+        Address = results[0].formatted_address;
+      }
+         else { Address = 'No results found'; }
+    }
+    else { Address = 'Geocoder failed due to: ' ; }
+    });
+
+}
+
+function getfood(maxdist) {
+  var infoWindow = new google.maps.InfoWindow();
+  var geocoder = new google.maps.Geocoder;
+
+  var sendData = {};
     sendData.pos = pos;
     sendData.maxdist = maxdist;
     console.log(JSON.stringify(sendData));
@@ -100,33 +112,44 @@ function getfood(maxdist) {
 			clearOverlays();
       data.forEach(function(item, i, arr) {
          foodLatlng = new google.maps.LatLng(data[i].location[1].toString(), data[i].location[0].toString());
+         geocodeLatLng(geocoder);
          foodName = data[i].name.toString();
+         ownerPhone =  JSON.stringify(data[i].owner[0].phone);
+         ownerName = JSON.stringify(data[i].owner[0].username);
+         foodAddress = Address;
          food = new google.maps.Marker({
-          position: foodLatlng,
-          title: foodName,
-					map: map
+              position: foodLatlng,
+              title: foodName,
+    					map: map
           });
-      var popupContent = '<div id="locationContent">' +
-                            '<div>' + foodName + '</div>' +
-                            '<div>' + foodLatlng + '</div>' +
-                            '<div>' + data[i].comment.toString() + '</div>' +
-                            // '<div><a href="' + data[i].owner + '">See This Story >></a></div>' +
-                            // '<div><img width="250" src="' + data[i].photoURL.toString() + '" /></div>' +
+
+
+        var popupContent = '<div id="foodContent" style="width: 400px">' +
+                            '<div><h2>' + foodName + '</h2></div>' +
+                            '<div>' + ' Продавец: '+ ownerName + 'Телефон: '+ ownerPhone +'</div>' +
+                            '<div id="foodAddress">' + 'Расположение: ' + foodAddress + '</div>' +
+                            '<div><img width="380" src="' + data[i].photoURL.toString() + '" /></div>' +
+                            '<div>' + data[i].comment.toString()  + '</div>' +
+                            
                         '</div>';
+
       createInfoWindow(food, popupContent);
 			markersArray.push(food);
-
     });
 
   });
-  var infoWindow = new google.maps.InfoWindow();
-  function createInfoWindow(marker, popupContent) {
+
+
+
+function createInfoWindow(marker, popupContent) {
         google.maps.event.addListener(food, 'click', function () {
             infoWindow.setContent(popupContent);
             infoWindow.open(map, this);
+            map.setCenter(foodLatlng);
   });
 }
-
-
+google.maps.event.addListener(infoWindow, 'domready', function() {
+  document.getElementById('foodAddress').innerHTML = Address;
+});
 };
 initMap();

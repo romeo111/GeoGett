@@ -3,8 +3,9 @@ var fs = require('fs-extra');
 var path = require('path');
 const User = require('../model/user');
 const Food = require('../model/food');
-
+const utils = require('../auth/utils');
 module.exports = function(app) {
+	var photoURL;
 	app.route('/upload')
     .post(function (req, res, next) {
 
@@ -12,15 +13,18 @@ module.exports = function(app) {
         req.pipe(req.busboy);
         req.busboy.on('file', function (fieldname, file, filename) {
             console.log("Uploading: " + filename);
-
+						var randomName = utils.randomString(12);
             //Path where image will be uploaded
-            fstream = fs.createWriteStream('./img/' + filename + '32323432');
+            fstream = fs.createWriteStream('./app/img/' + filename + randomName);
             file.pipe(fstream);
             fstream.on('close', function () {
-                console.log("Upload Finished of " + filename);
-                        //where to go next
-            });
+                console.log("Upload Finished of " + filename + randomName);
+                filename += randomName;
+								photoURL = '/img/' + filename;
+
+						});
         });
+				return;
     });
 
 
@@ -42,6 +46,11 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/img/*', function (req, res, next) {
+			res.sendFile(path.join(__dirname,  '../' + req.url));
+			return;
+	});
+
 	app.post('/addfood', function(req, res){
 		console.log('take POST query: ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
     var newfood = new Food();
@@ -53,6 +62,7 @@ module.exports = function(app) {
 			newfood.delivery = req.body.delivery;
 			newfood.comment = req.body.comment;
 			newfood.owner = req.body.owner;
+			newfood.photoURL = photoURL;
     	newfood.save(function(err){
       if(err) {
 				console.log('cant save' );

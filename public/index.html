@@ -312,7 +312,7 @@ $(document).ready(function () {
 $( "#add_form" ).submit(function( event ) {
   event.preventDefault();
   var newFood = {};
-    newFood.owner = $('#userName').val();
+    newFood.owner = UserObj.phone;
     newFood.foodname = $('#foodname').val();
     newFood.serving = $('#serving').is(':checked');
     newFood.grocery = $('#grocery').is(':checked');
