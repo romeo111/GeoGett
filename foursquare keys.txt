@@ -6,3 +6,44 @@ Client id
 3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS
 Client secret
 3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM
+
+
+function getfromFSQ () {
+  var infoWindow = new google.maps.InfoWindow({ });
+  var getFSQ = $.getJSON('https://api.foursquare.com/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101');
+  getFSQ.done(function (dataFSQ) {
+
+    $.each(dataFSQ.response.venues,  function( i, venues) {
+
+        venueLatLng = new google.maps.LatLng(venues.location.lat.toString(), venues.location.lng.toString());
+        venueName = venues.name;
+        venueAddress = venues.location.address;
+        contentVenues = '<p>Name: ' + venues.name +
+            ' Address: ' + venues.location.address +
+            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>';
+
+        venue = new google.maps.Marker({
+             position: venueLatLng,
+             title: venueName,
+             map: map,
+             icon: {
+                 size: new google.maps.Size(32, 32),
+                 url: 'https://foursquare.com/img/categories/food/default.png'
+                  }
+            //  infoWindow: {
+            //      content: '<p>' + contentVenues + '</p>'
+            //  }
+         });
+
+      //createInfoWindow(venue, contentVenues);
+        venuesArray.push(venue);
+        //map
+        google.maps.event.addListener(venue, 'click', function () {
+            infoWindow.setContent(contentVenues);
+            infoWindow.open(map, this);
+            map.setCenter(venueLatLng);
+          });
+    });
+
+  });
+}

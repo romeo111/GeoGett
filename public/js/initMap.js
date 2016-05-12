@@ -1,6 +1,6 @@
 var map, pos, currentPositionMarker, foodName, food, foodLatlng, Address;
 var markersArray = [];
-var markers_venues = [];
+var venuesArray = [];
 var foodInfowindowArray = [];
 
 function clearOverlays() {
@@ -96,37 +96,6 @@ function geocodeLatLng(geocoder, map, infowindow) {
     });
 }
 
-function getfromFSQ () {
-  var getFSQ = $.getJSON('https://api.foursquare.com/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101');
-  getFSQ.done(function (dataFSQ) {
-
-    $.each(dataFSQ.response.venues,  function( i, venues) {
-        console.log('name: ' + JSON.stringify(venues));
-        contentVenues = '<p>Name: ' + venues.name +
-            ' Address: ' + venues.location.address +
-            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>';
-        $(contentVenues).appendTo("#venues");
-        //map
-
-
-        markers_venues.push({
-            lat: venues.location.lat,
-            lng: venues.location.lng,
-            title: venues.name,
-            icon: {
-                size: new google.maps.Size(32, 32),
-                url: 'https://foursquare.com/img/categories/food/default.png'
-            },
-            infoWindow: {
-                content: '<p>' + contentVenues + '</p>'
-            }
-
-
-        });
-    });
-    map.addMarker(markers_venues);
-  });
-}
 
 function getfood(maxdist) {
   var infoWindow = new google.maps.InfoWindow({ });
@@ -141,11 +110,11 @@ function getfood(maxdist) {
       data.forEach(function(item, i, arr) {
          foodLatlng = new google.maps.LatLng(data[i].location[1].toString(), data[i].location[0].toString());
          geocodeLatLng(geocoder);
-         foodName = data[i].name.toString();
-         ownerPhone =  JSON.stringify(data[i].owner[0].phone);
-         ownerName = JSON.stringify(data[i].owner[0].username);
-         ownerName = ownerName.replace(/^"(.*)"$/, '$1');
-         ownerPhone = ownerPhone.replace(/^"(.*)"$/, '$1');
+         var foodName = data[i].name.toString();
+         var ownerPhone =  JSON.stringify(data[i].owner[0].phone);
+         var ownerName = JSON.stringify(data[i].owner[0].username);
+        ownerName = ownerName.replace(/^"(.*)"$/, '$1');
+        ownerPhone = ownerPhone.replace(/^"(.*)"$/, '$1');
          food = new google.maps.Marker({
               position: foodLatlng,
               title: foodName,

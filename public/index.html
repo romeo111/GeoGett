@@ -320,7 +320,9 @@ $(document).ready(function () {
 $( "#add_form" ).submit(function( event ) {
   event.preventDefault();
   var newFood = {};
-    newFood.owner = UserObj.phone;
+    newFood.phone = UserObj.phone;
+    newFood.username = UserObj.username;
+    newFood.ownerId = UserObj._id;
     newFood.foodname = $('#foodname').val();
     newFood.serving = $('#serving').is(':checked');
     newFood.grocery = $('#grocery').is(':checked');

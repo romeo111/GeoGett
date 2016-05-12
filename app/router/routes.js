@@ -61,7 +61,7 @@ module.exports = function(app) {
 			newfood.grocery = req.body.grocery;
 			newfood.delivery = req.body.delivery;
 			newfood.comment = req.body.comment;
-			newfood.owner = req.body.owner;
+			newfood.owner = req.body.ownerId;
 			newfood.photoURL = photoURL;
     	newfood.save(function(err){
       if(err) {
