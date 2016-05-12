@@ -1,7 +1,7 @@
-var map, pos, currentPositionMarker, foodName, food, foodLatlng;
+var map, pos, currentPositionMarker, foodName, food, foodLatlng, Address;
 var markersArray = [];
+var markers_venues = [];
 var foodInfowindowArray = [];
-var Address;
 
 function clearOverlays() {
   for (var i = 0; i < markersArray.length; i++ ) {
@@ -11,7 +11,6 @@ function clearOverlays() {
 }
 
 function initMap() {
-
 	var styles = [
     {
       stylers: [
@@ -86,7 +85,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 };
 
 function geocodeLatLng(geocoder, map, infowindow) {
-
     geocoder.geocode({'location': foodLatlng}, function(results, status) {
     if (status === google.maps.GeocoderStatus.OK) {
       if (results[0]) {
@@ -96,15 +94,43 @@ function geocodeLatLng(geocoder, map, infowindow) {
     }
     else { Address = 'Geocoder failed due to: ' ; }
     });
+}
 
+function getfromFSQ () {
+  var getFSQ = $.getJSON('https://api.foursquare.com/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101');
+  getFSQ.done(function (dataFSQ) {
+
+    $.each(dataFSQ.response.venues,  function( i, venues) {
+        console.log('name: ' + JSON.stringify(venues));
+        contentVenues = '<p>Name: ' + venues.name +
+            ' Address: ' + venues.location.address +
+            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>';
+        $(contentVenues).appendTo("#venues");
+        //map
+
+
+        markers_venues.push({
+            lat: venues.location.lat,
+            lng: venues.location.lng,
+            title: venues.name,
+            icon: {
+                size: new google.maps.Size(32, 32),
+                url: 'https://foursquare.com/img/categories/food/default.png'
+            },
+            infoWindow: {
+                content: '<p>' + contentVenues + '</p>'
+            }
+
+
+        });
+    });
+    map.addMarker(markers_venues);
+  });
 }
 
 function getfood(maxdist) {
-  var infoWindow = new google.maps.InfoWindow({
-
-  });
+  var infoWindow = new google.maps.InfoWindow({ });
   var geocoder = new google.maps.Geocoder;
-
   var sendData = {};
     sendData.pos = pos;
     sendData.maxdist = maxdist;
@@ -120,30 +146,22 @@ function getfood(maxdist) {
          ownerName = JSON.stringify(data[i].owner[0].username);
          ownerName = ownerName.replace(/^"(.*)"$/, '$1');
          ownerPhone = ownerPhone.replace(/^"(.*)"$/, '$1');
-
          food = new google.maps.Marker({
               position: foodLatlng,
               title: foodName,
     					map: map
           });
-
-
         var popupContent = '<div id="iw-container">' +
                             '<div class="iw-title">' + foodName + '</div>' +
                             '<div>' + ' Продавец: '+ ownerName + '<br>' + 'Телефон: '+ ownerPhone +'</div>' +
                             '<div id="foodAddress">' + '</div>' +
                             '<div><img width="400" src="' + data[i].photoURL.toString() + '" /></div>' +
                             '<div>' + 'Комментарий продавца: ' + data[i].comment.toString()  + '</div>' +
-
-                        '</div>';
-
+                            '</div>';
       createInfoWindow(food, popupContent);
 			markersArray.push(food);
     });
-
   });
-
-
 
 function createInfoWindow(marker, popupContent) {
         google.maps.event.addListener(food, 'click', function () {
@@ -152,9 +170,8 @@ function createInfoWindow(marker, popupContent) {
             map.setCenter(foodLatlng);
   });
 }
-google.maps.event.addListener(infoWindow, 'domready', function() {
-  document.getElementById('foodAddress').innerHTML = 'Расположение: ' + Address;
-
-});
+  google.maps.event.addListener(infoWindow, 'domready', function() {
+    document.getElementById('foodAddress').innerHTML = 'Расположение: ' + Address;
+  });
 };
 initMap();

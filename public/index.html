@@ -27,6 +27,7 @@
 
       <a id="btn-home" href="index.html" class="btn btn-success hidden" role="button">GeoGett</a>
       <a id="btn-map" class="btn btn-default" role="button" onclick="showMap()">Карта с едой</a>
+      <a id="btn-fsq" class="btn btn-info hidden" role="button" onclick="getfromFSQ()">Foursquare</a>
       <a id="btn-add" class="btn btn-info hidden" role="button" >Добавить свою еду</a>
       <button id="loginBtn" type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#loginDiv">Войти на сайт..</button>
       <button id="logoutBtn" type="button"  class="btn btn-info pull-right hidden" onclick="logout()">Выйти</button>
@@ -35,6 +36,7 @@
        <button type="button" class="btn btn-default" onclick="getfood(3)">3km</button>
        <button type="button" class="btn btn-default" onclick="getfood(10)">10km</button>
      </span>
+
 </div>
 <div id="loginDiv" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -99,6 +101,8 @@
 </div><!--  end add food form -->
 <div id="overlay"></div>
 <div id="map" class="map"></div>
+<div id="venues"></div>
+
 <div id="bigSlider">
     <div class="site-slider">
         <ul class="bxslider hidden-xs">
@@ -251,6 +255,7 @@ function showMap() {
   $('#btn-add').removeClass("hidden");
   $('#btn-login').removeClass("hidden");
   $('#btn-gtfd').removeClass("hidden");
+  $('#btn-fsq').removeClass("hidden");
 };
 
 $('#btn-add').click(function (e) {
@@ -259,6 +264,7 @@ $('#btn-add').click(function (e) {
     $('#loginDiv').modal() }
   else { $('#addDiv').modal() }
 });
+
 
 
 
