@@ -56,38 +56,24 @@ module.exports = function(app) {
 	});
 
 	app.get('/getFSQ', function (req, res) {
-			console.log('cathc getFSQ from client');
+			console.log('catch getFSQ from client: ' + JSON.stringify(req.query));
+			var pos = '&ll='+req.query.pos.lat.toString() +','+ req.query.pos.lng.toString();
+			var limit ='&limit='+req.query.limit.toString();
 
 			var options = {
 			  host: 'api.foursquare.com',
-			  path: '/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101',
+			  path: '/v2/venues/search?client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101'+pos+limit,
 				method : 'GET',
-
 			};
 			var res_data = '';
 			var req = https.get(options, function(response) {
-			  // handle the response
-
-			  response.on('data', function(chunk) {
-					console.log('in process');
-					res_data += chunk;
-
-			  });
-			  response.on('end', function() {
-					console.log('ended!');
-					console.log(res_data);
-					res.json(res_data);
-			  });
+			  response.on('data', function(chunk) {	res_data += chunk; });
+			  response.on('end', function() {	res.json(res_data);  });
 			});
-
 			req.on('error', function(e) {
 			  console.log("Got error: " + e.message);
 			});
-
 	});
-
-
-	//https://api.foursquare.com/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101');
 
 	app.post('/addfood', function(req, res){
 		console.log('take POST query: ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
