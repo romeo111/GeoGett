@@ -9,7 +9,8 @@ const FoodSchema = new Schema({
 
   name: {type: String, required: true},
   location: {type: [Number], index: '2d', required: true},
-  owner: { type: [UserSchema], required: true},
+  owner: {type: db.Schema.Types.ObjectId,
+        ref: 'User', required: true},
   photoURL: String,
   serving: Boolean,
   grocery: Boolean,

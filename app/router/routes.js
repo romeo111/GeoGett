@@ -39,7 +39,9 @@ module.exports = function(app) {
          $near: coords,
          $maxDistance: maxDistance
        }
-		}, function(err, foods) {
+			})
+			.populate('owner')
+			.exec(function(err, foods) {
 			res.status(200).json(foods);
 			res.end();
 			console.log('answer for GET' + JSON.stringify(foods));
@@ -58,15 +60,14 @@ module.exports = function(app) {
 			newfood.name = req.body.foodname;
 			newfood.location = req.body.location;
 			newfood.serving = req.body.serving;
-			newfood.grocery = req.body.grocery;
 			newfood.delivery = req.body.delivery;
 			newfood.comment = req.body.comment;
 			newfood.owner = req.body.ownerId;
 			newfood.photoURL = photoURL;
     	newfood.save(function(err){
       if(err) {
-				console.log('cant save' );
-				throw err;
+				console.log('cant save: ' + err );
+
 				res.send(err); return;}
 
 			console.log("SAVED: " + JSON.stringify(newfood.name));
