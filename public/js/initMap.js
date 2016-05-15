@@ -155,11 +155,17 @@ function createInfoWindow(marker, popupContent) {
 
 function getfromFSQ () {
   var infoWindow = new google.maps.InfoWindow({ });
-  var getFSQ = $.getJSON('https://api.foursquare.com/v2/venues/search?ll=50.4811,30.486&limit=5&client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101');
-  getFSQ.done(function (dataFSQ) {
+  var getFSQ = $.getJSON('./getFSQ');
+  getFSQ.done(function (res_data) {
+    //console.log(JSON.stringify(res_data['meta']));
+    //console.log(JSON.stringify(res_data['response']));
+    res_data = JSON.parse(res_data);
 
-    $.each(dataFSQ.response.venues,  function( i, venues) {
+    //console.log(JSON.stringify(res_data));
 
+    //console.log(JSON.stringify(res_data.response.venues));
+    $.each(res_data.response.venues,  function( i, venues) {
+        console.log('start FORECH');
         venueLatLng = new google.maps.LatLng(venues.location.lat.toString(), venues.location.lng.toString());
         venueName = venues.name;
         venueAddress = venues.location.address;
@@ -191,6 +197,7 @@ function getfromFSQ () {
     });
 
   });
+  getFSQ.fail( function(data) { console.log('fail' + JSON.stringify(data))})
 }
 
 
