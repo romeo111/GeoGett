@@ -75,6 +75,26 @@ module.exports = function(app) {
 			});
 	});
 
+	app.get('/getID/', function (req, res) {
+			console.log('catch getID: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
+			var ID = req.query.id.toString();
+			var optionsID = {
+			  host: 'api.foursquare.com',
+			  path: '/v2/venues/'+ ID + '/photos',
+				method : 'GET',
+			};
+			var res_ID = '';
+			var reqID = https.get(optionsID, function(response) {
+			  reqID.on('data', function(chunk2) {	res_ID += chunk2; });
+			  reqID.on('end', function() {
+					console.log(optionsID);
+					res.json(res_ID);  });
+			});
+			reqID.on('error', function(e) {
+			  console.log("Got error: " + e.message);
+			});
+	});
+
 	app.post('/addfood', function(req, res){
 		console.log('take POST query: ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));
     var newfood = new Food();

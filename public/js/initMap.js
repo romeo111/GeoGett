@@ -144,18 +144,21 @@ function getfromFSQ () {
   var infoWindow = new google.maps.InfoWindow({ });
   var sendDataFSQ = {};
     sendDataFSQ.pos = pos;
-    sendDataFSQ.limit = '20';
+    sendDataFSQ.limit = '10';
   var getFSQ = $.getJSON('./getFSQ', sendDataFSQ);
   getFSQ.done(function (res_data) {
     res_data = JSON.parse(res_data);
     clearOverlays();
     $.each(res_data.response.venues,  function( i, venues) {
         var venueLatLng = new google.maps.LatLng(venues.location.lat.toString(), venues.location.lng.toString());
+        console.log(JSON.stringify(venues.picture_url));
         var venueName = venues.name;
+        var venueID = venues.id;
         var venueAddress = venues.location.address;
         var contentVenues = '<p>Name: ' + venues.name +
             ' Address: ' + venues.location.address +
-            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>';
+            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>' +
+            '<button class="btn btn-info pull-right">' + 'Фотка' + '</button>';
 
         venue = new google.maps.Marker({
              position: venueLatLng,
