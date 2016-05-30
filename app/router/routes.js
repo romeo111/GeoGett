@@ -61,10 +61,11 @@ module.exports = function(app) {
 			console.log('catch getFSQ from client: ' + JSON.stringify(req.query));
 			var pos = '&ll='+req.query.pos.lat.toString() +','+ req.query.pos.lng.toString();
 			var limit ='&limit='+req.query.limit.toString();
-
+			var categories = '&categoryId=4d4b7105d754a06374d81259';
+			var radius = '&radius=1500'; //food
 			var options = {
 			  host: 'api.foursquare.com',
-			  path: '/v2/venues/search?'+ clientFSQ+pos+limit,
+			  path: '/v2/venues/search?'+ clientFSQ+pos+limit+categories+radius,
 				method : 'GET',
 			};
 			var res_data = '';
@@ -113,7 +114,6 @@ module.exports = function(app) {
 			var reqIDphotos = https.get(optionsIDphotos, function(response) {
 			  response.on('data', function(photos) {	res_IDphotos += photos; });
 			  response.on('end', function() {
-					//console.log(res_IDphotos);
 					res.json(res_IDphotos);
 					});
 			});
@@ -121,10 +121,6 @@ module.exports = function(app) {
 			  console.log("Got error: " + e.message);
 			});
 	});
-	// app.get('/foursquare', function (req, res) {
-	// 		console.log('catch foursquare: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
-	//
-	// });
 
 	app.post('/addfood', function(req, res){
 		console.log('take POST query: ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));

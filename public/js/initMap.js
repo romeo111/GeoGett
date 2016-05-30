@@ -156,10 +156,8 @@ function getfromFSQ () {
         var venueName = venues.name;
         var venueID = venues.id;
         var venueAddress = venues.location.address;
-        var contentVenues = '<div id='+'contentVenues'+'> <p>Name: ' + venues.name +
-            ' Address: ' + venues.location.address +
-            ' ID: ' + venues.id +
-            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p></div>';
+        var contentVenues = '<div id='+'contentVenues'+'> <h4> ' + venues.name + '</h4><br>' +
+             venues.location.address + '</div>';
 
         venue = new google.maps.Marker({
              position: venueLatLng,
@@ -173,7 +171,7 @@ function getfromFSQ () {
 
 
         venuesArray.push(venue);
-        map.setZoom(18);
+        map.setZoom(14);
         map.setCenter(pos);
         google.maps.event.addListener(venue, 'click', function () {
             var sendDataID = {};
@@ -192,13 +190,8 @@ function getfromFSQ () {
                 console.log('no photos');
               }
               else {
-              var photo1URL =  photos.response.photos.items[0].prefix + '100x100'+photos.response.photos.items[0].suffix;
+                    $('#contentVenues').append('<img href=/"/" src='+ photos.response.photos.items[0].prefix + '300x300'+photos.response.photos.items[0].suffix + ' ' +'</img>' );
 
-                console.log('ФОТКА 1:  ' + photo1URL);
-                //console.log(contentVenues);
-
-                $('#contentVenues').append('<img src=/"'+ photo1URL + '</img>' );
-                console.log(contentVenues);
               }
             });
             getIDphotos.fail(function (data) {
