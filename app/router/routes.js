@@ -55,6 +55,8 @@ module.exports = function(app) {
 			return;
 	});
 
+	var clientFSQ = 'client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101';
+
 	app.get('/getFSQ', function (req, res) {
 			console.log('catch getFSQ from client: ' + JSON.stringify(req.query));
 			var pos = '&ll='+req.query.pos.lat.toString() +','+ req.query.pos.lng.toString();
@@ -62,38 +64,67 @@ module.exports = function(app) {
 
 			var options = {
 			  host: 'api.foursquare.com',
-			  path: '/v2/venues/search?client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101'+pos+limit,
+			  path: '/v2/venues/search?'+ clientFSQ+pos+limit,
 				method : 'GET',
 			};
 			var res_data = '';
 			var req = https.get(options, function(response) {
 			  response.on('data', function(chunk) {	res_data += chunk; });
-			  response.on('end', function() {	res.json(res_data);  });
+			  response.on('end', function() {
+					//console.log('send data' + res_data);
+					res.json(res_data);  });
 			});
 			req.on('error', function(e) {
 			  console.log("Got error: " + e.message);
 			});
 	});
 
-	app.get('/getID/', function (req, res) {
+	app.get('/getID', function (req, res) {
 			console.log('catch getID: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
 			var ID = req.query.id.toString();
 			var optionsID = {
 			  host: 'api.foursquare.com',
-			  path: '/v2/venues/'+ ID + '/photos',
+			  path: '/v2/venues/'+ID+'?'+clientFSQ,
 				method : 'GET',
 			};
-			var res_ID = '';
+			var res_ID ='';
 			var reqID = https.get(optionsID, function(response) {
-			  reqID.on('data', function(chunk2) {	res_ID += chunk2; });
-			  reqID.on('end', function() {
-					console.log(optionsID);
-					res.json(res_ID);  });
+			  response.on('data', function(chunk2) {	res_ID += chunk2; });
+			  response.on('end', function() {
+					//console.log(res_ID);
+					res.json(res_ID);
+					});
 			});
 			reqID.on('error', function(e) {
 			  console.log("Got error: " + e.message);
 			});
 	});
+
+	app.get('/getID/photos', function (req, res) {
+			console.log('catch getIDphotos: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
+			var ID = req.query.id.toString();
+			var optionsIDphotos = {
+			  host: 'api.foursquare.com',
+			  path: '/v2/venues/'+ID+'/photos/'+ '?'+clientFSQ,
+				method : 'GET',
+				dataType: 'json'
+			};
+			var res_IDphotos ='';
+			var reqIDphotos = https.get(optionsIDphotos, function(response) {
+			  response.on('data', function(photos) {	res_IDphotos += photos; });
+			  response.on('end', function() {
+					//console.log(res_IDphotos);
+					res.json(res_IDphotos);
+					});
+			});
+			req.on('error', function(e) {
+			  console.log("Got error: " + e.message);
+			});
+	});
+	// app.get('/foursquare', function (req, res) {
+	// 		console.log('catch foursquare: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
+	//
+	// });
 
 	app.post('/addfood', function(req, res){
 		console.log('take POST query: ' + "req.query: " + JSON.stringify(req.query) + "req.body: " + JSON.stringify(req.body));

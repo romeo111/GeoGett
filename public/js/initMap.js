@@ -141,6 +141,7 @@ function createInfoWindow(marker, popupContent) {
 };
 
 function getfromFSQ () {
+
   var infoWindow = new google.maps.InfoWindow({ });
   var sendDataFSQ = {};
     sendDataFSQ.pos = pos;
@@ -151,14 +152,14 @@ function getfromFSQ () {
     clearOverlays();
     $.each(res_data.response.venues,  function( i, venues) {
         var venueLatLng = new google.maps.LatLng(venues.location.lat.toString(), venues.location.lng.toString());
-        console.log(JSON.stringify(venues.picture_url));
+      //  console.log(JSON.stringify(venues.picture_url));
         var venueName = venues.name;
         var venueID = venues.id;
         var venueAddress = venues.location.address;
-        var contentVenues = '<p>Name: ' + venues.name +
+        var contentVenues = '<div id='+'contentVenues'+'> <p>Name: ' + venues.name +
             ' Address: ' + venues.location.address +
-            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p>' +
-            '<button class="btn btn-info pull-right">' + 'Фотка' + '</button>';
+            ' ID: ' + venues.id +
+            ' Lat/long: ' + venues.location.lat + ', ' + venues.location.lng + '</p></div>';
 
         venue = new google.maps.Marker({
              position: venueLatLng,
@@ -170,10 +171,42 @@ function getfromFSQ () {
                   }
          });
 
+
         venuesArray.push(venue);
         map.setZoom(18);
         map.setCenter(pos);
         google.maps.event.addListener(venue, 'click', function () {
+            var sendDataID = {};
+            sendDataID.id = venues.id;
+            var getID= $.getJSON('./getID', sendDataID);
+            getID.done(function (res_dataID) {
+                  console.log('ok getID' );   });
+                  getID.fail( function(data) { console.log('FAIL ID' + JSON.stringify(data))})
+
+            var getIDphotos = $.getJSON('./getID/photos', sendDataID);
+            getIDphotos.done(function (res_dataIDphotos) {
+
+              var photos = JSON.parse(res_dataIDphotos);
+              //console.log(JSON.stringify(photos));
+              if(!photos.response.photos.items[0]) {
+                console.log('no photos');
+              }
+              else {
+              var photo1URL =  photos.response.photos.items[0].prefix + '100x100'+photos.response.photos.items[0].suffix;
+
+                console.log('ФОТКА 1:  ' + photo1URL);
+                //console.log(contentVenues);
+
+                $('#contentVenues').append('<img src=/"'+ photo1URL + '</img>' );
+                console.log(contentVenues);
+              }
+            });
+            getIDphotos.fail(function (data) {
+              console.log('FAIL to load photo' + data);
+            })
+
+
+
             infoWindow.setContent(contentVenues);
             infoWindow.open(map, this);
             map.setCenter(venueLatLng);
