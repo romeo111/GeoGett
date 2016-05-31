@@ -145,7 +145,7 @@ function getfromFSQ () {
   var infoWindow = new google.maps.InfoWindow({ });
   var sendDataFSQ = {};
     sendDataFSQ.pos = pos;
-    sendDataFSQ.limit = '10';
+    sendDataFSQ.limit = '50';
   var getFSQ = $.getJSON('./getFSQ', sendDataFSQ);
   getFSQ.done(function (res_data) {
     res_data = JSON.parse(res_data);
@@ -178,7 +178,7 @@ function getfromFSQ () {
             sendDataID.id = venues.id;
             var getID= $.getJSON('./getID', sendDataID);
             getID.done(function (res_dataID) {
-                  console.log('ok getID' );   });
+                  console.log('ok getID: ' + res_dataID );   });
                   getID.fail( function(data) { console.log('FAIL ID' + JSON.stringify(data))})
 
             var getIDphotos = $.getJSON('./getID/photos', sendDataID);

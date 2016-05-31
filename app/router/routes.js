@@ -58,14 +58,14 @@ module.exports = function(app) {
 	var clientFSQ = 'client_id=3LRKSJWBD3IGVOVDTYAFTG4P4PZQPDEKKEQG5HNJCXBXTCCS&client_secret=3V4BYVOQOMGRFLGXBOU4DWGHJVHMZW0FUXPMPOYOAYLRMLTM&v=20160101';
 
 	app.get('/getFSQ', function (req, res) {
-			console.log('catch getFSQ from client: ' + JSON.stringify(req.query));
+			//console.log('catch getFSQ from client: ' + JSON.stringify(req.query));
 			var pos = '&ll='+req.query.pos.lat.toString() +','+ req.query.pos.lng.toString();
 			var limit ='&limit='+req.query.limit.toString();
 			var categories = '&categoryId=4d4b7105d754a06374d81259';
-			var radius = '&radius=1500'; //food
+			var radius = '&radius=800'; //food
 			var options = {
 			  host: 'api.foursquare.com',
-			  path: '/v2/venues/search?'+ clientFSQ+pos+limit+categories+radius,
+			  path: '/v2/venues/search?'+ clientFSQ+pos+limit+categories+radius+'&intent=browse',
 				method : 'GET',
 			};
 			var res_data = '';
@@ -81,7 +81,7 @@ module.exports = function(app) {
 	});
 
 	app.get('/getID', function (req, res) {
-			console.log('catch getID: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
+			//console.log('catch getID: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
 			var ID = req.query.id.toString();
 			var optionsID = {
 			  host: 'api.foursquare.com',
@@ -102,7 +102,7 @@ module.exports = function(app) {
 	});
 
 	app.get('/getID/photos', function (req, res) {
-			console.log('catch getIDphotos: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
+			//console.log('catch getIDphotos: ' + JSON.stringify(req.query) + " body: " + JSON.stringify(req.body)  );
 			var ID = req.query.id.toString();
 			var optionsIDphotos = {
 			  host: 'api.foursquare.com',
